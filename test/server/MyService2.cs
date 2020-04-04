@@ -8,18 +8,17 @@ using System.Threading.Tasks;
 
 namespace server
 {
-    public class MyService : NarutoWebSocketService, IDisposable
+    public class MyService2 : NarutoWebSocketService, IDisposable
     {
         private readonly ILogger<MyService> logger;
 
-        public MyService(ILogger<MyService> _logger)
+        public MyService2(ILogger<MyService> _logger)
         {
             logger = _logger;
         }
-        public override async Task OnConnectionBeginAsync(WebSocketClient client)
+        public override Task OnConnectionBeginAsync(WebSocketClient client)
         {
-            await base.OnConnectionBeginAsync(client);
-            logger.LogInformation($"{ConnectionId}:成功连接");
+            return base.OnConnectionBeginAsync(client);
         }
 
         public override Task OnDisConnectionAsync(WebSocketClient client)

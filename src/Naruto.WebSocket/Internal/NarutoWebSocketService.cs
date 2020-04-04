@@ -1,4 +1,7 @@
-﻿using Naruto.WebSocket.Object;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Naruto.WebSocket.Interface;
+using Naruto.WebSocket.Object;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,11 +18,45 @@ namespace Naruto.WebSocket.Internal
     public abstract class NarutoWebSocketService
     {
         /// <summary>
+        /// 继承此泛型的类型
+        /// </summary>
+        private Type GenericType { get; set; }
+        /// <summary>
+        /// http上下文
+        /// </summary>
+        protected HttpContext Context { get; private set; }
+        /// <summary>
+        /// 连接Id
+        /// </summary>
+        protected string ConnectionId { get; private set; }
+
+        /// <summary>
+        /// 群组管理
+        /// </summary>
+        protected IGroupStorage Group { get; private set; }
+
+        /// <summary>
+        /// 消息发送客户端
+        /// </summary>
+
+        protected IClientSend Client { get; private set; }
+
+
+        public NarutoWebSocketService()
+        {
+            GenericType = this.GetType();
+        }
+        /// <summary>
         /// 开始连接
         /// </summary>
         /// <returns></returns>
-        public virtual Task OnConnectionBegin(WebSocketClient client)
+        public virtual Task OnConnectionBeginAsync(WebSocketClient client)
         {
+            //初始化数据
+            Context = client.Context;
+            ConnectionId = client.ConnectionId;
+            Group = Context.RequestServices.GetRequiredService(typeof(IGroupStorage<>).MakeGenericType(GenericType)) as IGroupStorage;
+            Client = Context.RequestServices.GetRequiredService(typeof(IClientSend<>).MakeGenericType(GenericType)) as IClientSend;
             return Task.CompletedTask;
         }
         /// <summary>
@@ -27,7 +64,7 @@ namespace Naruto.WebSocket.Internal
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        public virtual Task OnDisConnection(WebSocketClient client)
+        public virtual Task OnDisConnectionAsync(WebSocketClient client)
         {
             return Task.CompletedTask;
         }

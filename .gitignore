@@ -1,10 +1,6 @@
 #过滤
 .vs/
-/src/Naruto.WebSocket/obj/
-/src/Naruto.WebSocket/bin/
-/src/Naruto.WebSocket.Redis/obj/
-/src/Naruto.WebSocket.Redis/bin/
-/test/server/obj/
-/test/server/bin/
+/*/*/bin/
+/*/*/obj/
 */Properties/
 *.log

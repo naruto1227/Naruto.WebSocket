@@ -19,19 +19,14 @@ namespace Naruto.WebSocket.Internal
     public class MessageReviceHandler : IMessageReviceHandler
     {
         /// <summary>
-        /// 服务提供者
-        /// </summary>
-        private readonly IServiceProvider serviceProvider;
-        /// <summary>
         /// 配置信息工厂
         /// </summary>
 
         private readonly IWebSocketOptionFactory webSocketOptionFactory;
 
 
-        public MessageReviceHandler(IServiceProvider _serviceProvider, IWebSocketOptionFactory _webSocketOptionFactory)
+        public MessageReviceHandler( IWebSocketOptionFactory _webSocketOptionFactory)
         {
-            serviceProvider = _serviceProvider;
             webSocketOptionFactory = _webSocketOptionFactory;
         }
         /// <summary>
@@ -54,7 +49,7 @@ namespace Naruto.WebSocket.Internal
             var service = context.RequestServices.GetRequiredService(webSocketOption.ServiceType);
 
             //验证消息是否为内部的消息
-            if (reciveMessageBase.action.Equals(NarutoWebSocketServiceMethodEnum.OnConnectionBegin.ToString()) || reciveMessageBase.action.Equals(NarutoWebSocketServiceMethodEnum.OnDisConnection.ToString()))
+            if (reciveMessageBase.action.Equals(NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString()) || reciveMessageBase.action.Equals(NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString()))
             {
                 await EexecInternalMessage(service, webSocketClient, reciveMessageBase).ConfigureAwait(false);
             }

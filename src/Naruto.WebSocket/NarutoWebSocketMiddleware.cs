@@ -41,12 +41,16 @@ namespace Naruto.WebSocket
         /// </summary>
         private readonly IWebSocketOptionFactory socketOptionFactory;
 
+        private readonly IServiceProvider serviceProvider;
 
-        public NarutoWebSocketMiddleware(RequestDelegate _next, ILogger<NarutoWebSocketMiddleware> _logger, IWebSocketOptionFactory _socketOptionFactory)
+
+
+        public NarutoWebSocketMiddleware(RequestDelegate _next, ILogger<NarutoWebSocketMiddleware> _logger, IWebSocketOptionFactory _socketOptionFactory, IServiceProvider _serviceProvider)
         {
             next = _next;
             logger = _logger;
             socketOptionFactory = _socketOptionFactory;
+            serviceProvider = _serviceProvider;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -75,7 +79,8 @@ namespace Naruto.WebSocket
                     WebSocketClient webSocketClient = new WebSocketClient
                     {
                         WebSocket = await context.WebSockets.AcceptWebSocketAsync(),
-                        ConnectionId = connectionId.Any() ? connectionId.ToString() : Guid.NewGuid().ToString()
+                        ConnectionId = connectionId.Any() ? connectionId.ToString() : Guid.NewGuid().ToString(),
+                        Context = context
                     };
                     //处理
                     await Handler(context, webSocketClient).ConfigureAwait(false);
@@ -96,14 +101,18 @@ namespace Naruto.WebSocket
         {
             //存储的key
             var key = Guid.NewGuid();
+            //获取当前租户的配置信息
+            var webSocketOption = await socketOptionFactory.GetAsync(context.Request.Path);
+            //获取客户端存储对象
+            var clientStorage = serviceProvider.GetRequiredService(typeof(IWebSocketClientStorage<>).MakeGenericType(webSocketOption.ServiceType)) as IWebSocketClientStorage;
             //添加到集合中 将当前用户连接
-            WebSocketClientCollection.Add(key, webSocketClient);
+            await clientStorage.AddAsync(key, webSocketClient);
             //获取服务
             var messageRevice = context.RequestServices.GetRequiredService<IMessageReviceHandler>();
             try
             {
                 //调用开启连接的方法
-                await messageRevice.HandlerAsync(context, webSocketClient, new ReciveMessageBase { action = NarutoWebSocketServiceMethodEnum.OnConnectionBegin.ToString() }.ToJson()).ConfigureAwait(false);
+                await messageRevice.HandlerAsync(context, webSocketClient, new ReciveMessageBase { action = NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString() }.ToJson()).ConfigureAwait(false);
 
                 //接收消息 判断是否开启连接
                 while (webSocketClient.WebSocket.State == System.Net.WebSockets.WebSocketState.Open)
@@ -128,9 +137,9 @@ namespace Naruto.WebSocket
             finally
             {
                 //处理断开事件的事件
-                await messageRevice.HandlerAsync(context, webSocketClient, new ReciveMessageBase { action = NarutoWebSocketServiceMethodEnum.OnDisConnection.ToString() }.ToJson()).ConfigureAwait(false);
+                await messageRevice.HandlerAsync(context, webSocketClient, new ReciveMessageBase { action = NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString() }.ToJson()).ConfigureAwait(false);
                 //当连接不是开启的状态就移除
-                WebSocketClientCollection.Remove(key);
+                await clientStorage.RemoveAsync(key);
             }
         }
     }

@@ -5,6 +5,7 @@ using Naruto.WebSocket;
 using Naruto.WebSocket.Interface;
 using Naruto.WebSocket.Internal;
 using Naruto.WebSocket.Internal.Cache;
+using Naruto.WebSocket.Internal.Storage;
 using Naruto.WebSocket.Object;
 using System;
 using System.Collections.Generic;
@@ -47,10 +48,14 @@ namespace Naruto.WebSocket.Extensions
         {
             if (services.BuildServiceProvider().GetService<IWebSocketOptionFactory>() == null)
             {
-                services.TryAddTransient<TService>();
-                services.TryAddSingleton<IMessageReviceHandler, MessageReviceHandler>();
-                services.TryAddSingleton<IWebSocketOptionFactory, WebSocketOptionFactory>();
+                services.AddSingleton(typeof(IGroupStorage<>), typeof(InMemoryGroupStorage<>));
+                services.AddSingleton(typeof(IWebSocketClientStorage<>), typeof(InMemoryWebSocketClientStorage<>));
+                services.AddSingleton<IMessageReviceHandler, MessageReviceHandler>();
+                services.AddSingleton<IWebSocketOptionFactory, WebSocketOptionFactory>();
             }
+
+            services.AddScoped<TService>();
+
             //获取配置
             WebSocketOption webSocketOption = new WebSocketOption();
             option?.Invoke(webSocketOption);

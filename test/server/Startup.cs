@@ -17,7 +17,7 @@ namespace server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddNarutoWebSocket<MyService>(a => a.Path = new PathString("/hello"));
+            services.AddNarutoWebSocket<MyService2>(a => a.Path = new PathString("/hello"));
             services.AddNarutoWebSocket<MyService>(a =>
             {
                 a.Path = new PathString("/ws");

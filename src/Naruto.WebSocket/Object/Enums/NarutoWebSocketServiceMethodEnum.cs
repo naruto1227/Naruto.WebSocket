@@ -14,10 +14,10 @@ namespace Naruto.WebSocket.Object.Enums
         /// <summary>
         /// 连接开始
         /// </summary>
-        OnConnectionBegin,
+        OnConnectionBeginAsync,
         /// <summary>
         /// 连接断开
         /// </summary>
-        OnDisConnection
+        OnDisConnectionAsync
     }
 }

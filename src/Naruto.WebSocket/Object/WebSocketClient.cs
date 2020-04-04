@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
@@ -20,7 +21,12 @@ namespace Naruto.WebSocket.Object
         /// <summary>
         /// websocket客户端
         /// </summary>
-        public System.Net.WebSockets.WebSocket WebSocket { get; set; }
+        internal System.Net.WebSockets.WebSocket WebSocket { get; set; }
+
+        /// <summary>
+        /// http上下文
+        /// </summary>
+        public HttpContext Context { get; set; }
 
     }
 }

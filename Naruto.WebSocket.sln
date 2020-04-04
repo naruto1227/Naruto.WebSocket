@@ -11,7 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{73825E0C-5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Naruto.WebSocket.Redis", "src\Naruto.WebSocket.Redis\Naruto.WebSocket.Redis.csproj", "{718BD108-E865-447F-96C9-46908ECED666}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "server", "test\server\server.csproj", "{408EA986-8289-4787-8CF1-A815B3F6C340}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "server", "test\server\server.csproj", "{408EA986-8289-4787-8CF1-A815B3F6C340}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTest", "test\XUnitTest\XUnitTest.csproj", "{6D98BB48-AE79-436F-81F6-FBFB7F708EF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{408EA986-8289-4787-8CF1-A815B3F6C340}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{408EA986-8289-4787-8CF1-A815B3F6C340}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{408EA986-8289-4787-8CF1-A815B3F6C340}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D98BB48-AE79-436F-81F6-FBFB7F708EF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D98BB48-AE79-436F-81F6-FBFB7F708EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D98BB48-AE79-436F-81F6-FBFB7F708EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D98BB48-AE79-436F-81F6-FBFB7F708EF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +45,7 @@ Global
 		{2055DF4D-055D-4D2B-A3BC-3CD14AB7A1C6} = {BEB5E191-C5DA-4468-BF04-C57B096DC6A7}
 		{718BD108-E865-447F-96C9-46908ECED666} = {BEB5E191-C5DA-4468-BF04-C57B096DC6A7}
 		{408EA986-8289-4787-8CF1-A815B3F6C340} = {73825E0C-5A19-4D97-8EB3-9E087915AD32}
+		{6D98BB48-AE79-436F-81F6-FBFB7F708EF6} = {73825E0C-5A19-4D97-8EB3-9E087915AD32}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2EB7C6F2-527E-404A-905B-ACD445028818}
