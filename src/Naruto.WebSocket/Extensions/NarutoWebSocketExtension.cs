@@ -3,8 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Naruto.WebSocket;
 using Naruto.WebSocket.Interface;
+using Naruto.WebSocket.Interface.Client;
 using Naruto.WebSocket.Internal;
 using Naruto.WebSocket.Internal.Cache;
+using Naruto.WebSocket.Internal.Client;
 using Naruto.WebSocket.Internal.Storage;
 using Naruto.WebSocket.Object;
 using System;
@@ -50,6 +52,13 @@ namespace Naruto.WebSocket.Extensions
             {
                 services.AddSingleton(typeof(IGroupStorage<>), typeof(InMemoryGroupStorage<>));
                 services.AddSingleton(typeof(IWebSocketClientStorage<>), typeof(InMemoryWebSocketClientStorage<>));
+
+                services.AddSingleton(typeof(IClientSend<>), typeof(ClientSend<>));
+                services.AddSingleton(typeof(IAllClient<>), typeof(InMemoryAllClient<>));
+                services.AddSingleton(typeof(IOtherClient<>), typeof(InMemoryOtherClient<>));
+                services.AddSingleton(typeof(ICurrentClient<>), typeof(InMemoryCurrentClient<>));
+                services.AddSingleton(typeof(IGroupClient<>), typeof(InMemoryGroupClient<>));
+
                 services.AddSingleton<IMessageReviceHandler, MessageReviceHandler>();
                 services.AddSingleton<IWebSocketOptionFactory, WebSocketOptionFactory>();
             }

@@ -21,6 +21,10 @@ namespace Naruto.WebSocket.Internal.Storage
         /// </summary>
         public Task AddAsync(Guid key, WebSocketClient webSocketClient)
         {
+            if (key == null)
+            {
+                return Task.CompletedTask;
+            }
             webSocketClients.TryAdd(key, webSocketClient);
             return Task.CompletedTask;
         }
@@ -30,6 +34,10 @@ namespace Naruto.WebSocket.Internal.Storage
         /// </summary>
         public Task RemoveAsync(Guid key)
         {
+            if (key == null)
+            {
+                return Task.CompletedTask;
+            }
             webSocketClients.TryRemove(key, out var webSocketClient);
             webSocketClient.WebSocket?.Abort();
             webSocketClient.WebSocket?.Dispose();
@@ -42,6 +50,10 @@ namespace Naruto.WebSocket.Internal.Storage
         /// <returns></returns>
         public Task<WebSocketClient> GetAsync(Guid key)
         {
+            if (key == null)
+            {
+                return default;
+            }
             webSocketClients.TryGetValue(key, out var socket);
             return Task.FromResult(socket);
         }
@@ -51,7 +63,58 @@ namespace Naruto.WebSocket.Internal.Storage
         /// <returns></returns>
         public Task<List<System.Net.WebSockets.WebSocket>> GetByConnectionIdAsync(string connectionId)
         {
+            if (connectionId == null)
+            {
+                return default;
+            }
             return Task.FromResult(webSocketClients.Where(a => a.Value.ConnectionId == connectionId).Select(a => a.Value.WebSocket).ToList());
+        }
+        /// <summary>
+        /// 通过连接Id 获取websocket客户端
+        /// </summary>
+        /// <returns></returns>
+        public Task<List<System.Net.WebSockets.WebSocket>> GetByConnectionIdAsync(List<string> connectionId)
+        {
+            if (connectionId == null || connectionId.Count() <= 0)
+            {
+                return default;
+            }
+            return Task.FromResult(webSocketClients.Where(a => connectionId.Contains(a.Value.ConnectionId)).Select(a => a.Value.WebSocket).ToList());
+        }
+        /// <summary>
+        /// 获取所有在线的连接
+        /// </summary>
+        /// <returns></returns>
+        public Task<List<System.Net.WebSockets.WebSocket>> GetAllAsync()
+        {
+            return Task.FromResult(webSocketClients.Select(a => a.Value.WebSocket).ToList());
+        }
+
+
+        /// <summary>
+        /// 获取除了指定连接Id的其它websocket客户端
+        /// </summary>
+        /// <returns></returns>
+        public Task<List<System.Net.WebSockets.WebSocket>> ExceptConnectionIdAsync(string connectionId)
+        {
+            if (connectionId == null || connectionId.Count() <= 0)
+            {
+                return GetAllAsync();
+            }
+            return Task.FromResult(webSocketClients.Where(a => a.Value.ConnectionId != connectionId).Select(a => a.Value.WebSocket).ToList());
+        }
+
+        /// <summary>
+        /// 获取除了指定连接Id的其它websocket客户端
+        /// </summary>
+        /// <returns></returns>
+        public Task<List<System.Net.WebSockets.WebSocket>> ExceptConnectionIdAsync(List<string> connectionId)
+        {
+            if (connectionId == null || connectionId.Count() <= 0)
+            {
+                return GetAllAsync();
+            }
+            return Task.FromResult(webSocketClients.Where(a => !connectionId.Contains(a.Value.ConnectionId)).Select(a => a.Value.WebSocket).ToList());
         }
     }
 }

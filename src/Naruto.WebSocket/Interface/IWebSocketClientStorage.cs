@@ -39,6 +39,30 @@ namespace Naruto.WebSocket.Interface
         /// </summary>
         /// <returns></returns>
         Task<List<System.Net.WebSockets.WebSocket>> GetByConnectionIdAsync(string connectionId);
+
+        /// <summary>
+        /// 通过连接Id 获取websocket客户端
+        /// </summary>
+        /// <returns></returns>
+        Task<List<System.Net.WebSockets.WebSocket>> GetByConnectionIdAsync(List<string> connectionId);
+        /// <summary>
+        /// 获取所有在线的连接
+        /// </summary>
+        /// <returns></returns>
+        Task<List<System.Net.WebSockets.WebSocket>> GetAllAsync();
+
+
+        /// <summary>
+        /// 获取除了指定连接Id的其它websocket客户端
+        /// </summary>
+        /// <returns></returns>
+        Task<List<System.Net.WebSockets.WebSocket>> ExceptConnectionIdAsync(string connectionId);
+
+        /// <summary>
+        /// 获取除了指定连接Id的其它websocket客户端
+        /// </summary>
+        /// <returns></returns>
+        Task<List<System.Net.WebSockets.WebSocket>> ExceptConnectionIdAsync(List<string> connectionId);
     }
 
     /// <summary>

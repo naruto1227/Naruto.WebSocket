@@ -17,20 +17,20 @@ namespace Naruto.WebSocket.Interface
         /// <summary>
         /// 给指定连接发送消息
         /// </summary>
-        ICurrentClient Current { get;internal set; }
+        ICurrentClient Current { get; }
         /// <summary>
         /// 给所有用户发送消息
         /// </summary>
-        IAllClient All { get; internal set; }
+        IAllClient All { get;}
         /// <summary>
         /// 给群发送消息
         /// </summary>
 
-        IGroupClient Group { get; internal set; }
+        IGroupClient Group { get; }
         /// <summary>
         /// 给其它用户发送消息
         /// </summary>
-        IOtherClient Other { get; internal set; }
+        IOtherClient Other { get;  }
     }
     /// <summary>
     /// 张海波

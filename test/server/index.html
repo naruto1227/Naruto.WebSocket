@@ -1,0 +1,63 @@
+
+
+<div style="margin-bottom:5px;">
+    群号: <input type="text" id="txtRoomId" value="666666" /> <button id="btnJoin" onclick="join()">入群</button> <button id="btnLeave" onclick="leave()">退群</button>
+</div>
+<div style="height:300px;width:600px">
+    <textarea style="height:100%;width:100%" id="msgList"></textarea>
+    <div style="text-align: right">
+        <div>
+            <input type="text" id="msg" />
+            <button type="button" id="btnSend" onclick="send()">群内发言</button>
+            <button type="button" id="btnSendAll" onclick="sendAll()">发送给所有人</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var url = "ws://localhost:5000";
+    //ʵ����һ��websocket
+    var webSocket = new WebSocket(url + "/ws");
+    //开启连接
+    webSocket.onopen = function (e) {
+        document.getElementById("content").innerHTML = "webSocket is open";
+    };
+
+    //加入群
+    function join() {
+        var msg = {
+            action: "join",
+            roomId: document.getElementById("txtRoomId").value
+        };
+        webSocket.send(JSON.stringify(msg));
+    }
+    //断线
+    function leave() {
+        var msg = {
+            action: "leave",
+            roomId: document.getElementById("txtRoomId").value
+        };
+        webSocket.send(JSON.stringify(msg));
+    }
+    function send() {
+            var msg = { 
+            action: "send",
+            msg: document.getElementById("msg").value,
+            roomId: document.getElementById("txtRoomId").value
+        };
+        webSocket.send(JSON.stringify(msg));
+    }
+
+    function sendAll() {
+            var msg = { 
+            action: "sendAll",
+            msg: document.getElementById("msg").value
+        };
+        webSocket.send(JSON.stringify(msg));
+    }
+    webSocket.onmessage = function (data) {
+        console.log(data);
+        var context = document.getElementById("msgList").innerHTML;
+        document.getElementById("msgList").innerHTML = context + '\r\n' + data.data;
+    };
+</script>

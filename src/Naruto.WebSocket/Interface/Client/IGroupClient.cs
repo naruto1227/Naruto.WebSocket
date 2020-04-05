@@ -20,6 +20,7 @@ namespace Naruto.WebSocket.Interface.Client
         /// <param name="groupId">群组Id</param>
         /// <returns></returns>
         Task SendAsync(string groupId, string msg);
+
     }
     /// <summary>
     /// 张海波

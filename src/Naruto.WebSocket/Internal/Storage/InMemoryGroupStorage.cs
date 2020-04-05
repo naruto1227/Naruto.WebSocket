@@ -26,6 +26,10 @@ namespace Naruto.WebSocket.Internal.Storage
         }
         public async Task AddAsync(string groupId, string connectionId)
         {
+            if (string.IsNullOrWhiteSpace(groupId) || string.IsNullOrWhiteSpace(connectionId))
+            {
+                return;
+            }
             //获取所有的连接
             var connections = await GetAsync(groupId);
             if (connections == null || connections.Count() <= 0)
@@ -42,6 +46,10 @@ namespace Naruto.WebSocket.Internal.Storage
 
         public async Task AddAsync(string groupId, List<string> connectionIds)
         {
+            if (string.IsNullOrWhiteSpace(groupId) || connectionIds == null || connectionIds.Count() <= 0)
+            {
+                return;
+            }
             //获取所有的连接
             var connections = await GetAsync(groupId);
             if (connections == null || connections.Count() <= 0)
@@ -59,12 +67,20 @@ namespace Naruto.WebSocket.Internal.Storage
 
         public Task<List<string>> GetAsync(string groupId)
         {
+            if (string.IsNullOrWhiteSpace(groupId))
+            {
+                return default;
+            }
             cache.TryGetValue(groupId, out var connections);
             return Task.FromResult(connections);
         }
 
         public async Task RemoveAsync(string groupId, string connectionId)
         {
+            if (string.IsNullOrWhiteSpace(groupId) || string.IsNullOrWhiteSpace(connectionId))
+            {
+                return;
+            }
             //获取所有的连接
             var connections = await GetAsync(groupId);
             if (connections != null && connections.Count() > 0)

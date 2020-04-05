@@ -38,10 +38,28 @@ namespace server
 
         public async Task send(SendMsg sendMsg)
         {
-            await Group.AddAsync("11", "2");
-            await Task.Delay(2);
+            logger.LogInformation($"{ConnectionId}:发送群组消息");
+            await Client.Group.SendAsync(sendMsg.roomId, sendMsg.msg);
+        }
+        public async Task sendAll(SendMsg sendMsg)
+        {
+            logger.LogInformation($"{ConnectionId}:发送所有人消息");
+            await Client.All.SendAsync(sendMsg.msg);
+        }
+        public async Task join(SendMsg sendMsg)
+        {
+            await Group.AddAsync(sendMsg.roomId, ConnectionId);
+        }
+        public async Task leave(SendMsg sendMsg)
+        {
+            await Group.RemoveAsync(sendMsg.roomId, ConnectionId);
         }
 
+        public async Task other(SendMsg sendMsg)
+        {
+            logger.LogInformation($"{ConnectionId}:发送指定连接的之外的其它用户消息");
+            await Client.Other.SendAsync(sendMsg.connectionId, sendMsg.msg);
+        }
         private async Task send2()
         {
 

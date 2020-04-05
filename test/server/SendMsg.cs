@@ -11,5 +11,7 @@ namespace server
         public string msg { get; set; }
 
         public string roomId { get; set; }
+
+        public string connectionId { get; set; }
     }
 }
