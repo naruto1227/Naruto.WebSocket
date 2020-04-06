@@ -56,8 +56,8 @@ namespace Naruto.WebSocket.Redis
             {
                 throw new ArgumentNullException(nameof(subscribeMessage));
             }
-            //存储消息，并设置3分钟有效期
-            await redisRepository.String().AddAsync(KeyPrefix + key, subscribeMessage, TimeSpan.FromMinutes(3));
+            //存储消息，并设置90s有效期
+            await redisRepository.String().AddAsync(KeyPrefix + key, subscribeMessage, TimeSpan.FromSeconds(90));
         }
     }
 }
