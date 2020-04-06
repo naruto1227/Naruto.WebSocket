@@ -29,10 +29,14 @@ namespace XUnitTest
         public async Task Test2()
         {
             ClientWebSocket webSocket = new ClientWebSocket();
-            await webSocket.ConnectAsync(new Uri("ws://localhost:5000/ws"), CancellationToken.None);
+            await webSocket.ConnectAsync(new Uri("ws://localhost:5003/ws"), CancellationToken.None);
 
-            var msg = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new { action = "other", connectionId = "039c8069-9ae6-43d1-9203-dae5f693de1c", msg = "hello word" }));
-           await webSocket.SendAsync(msg, WebSocketMessageType.Text, true, CancellationToken.None);
+            var msg = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new { action = "current", connectionId = "12345678", msg = "hello word" }));
+            for (int i = 0; i < 1000; i++)
+            {
+                await webSocket.SendAsync(msg, WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+          
             await Task.Delay(100000);
         }
     }

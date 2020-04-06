@@ -17,7 +17,7 @@
 <script type="text/javascript">
     var url = "ws://localhost:5003";
     //ʵ����һ��websocket
-    var webSocket = new WebSocket(url + "/ws");
+    var webSocket = new WebSocket(url + "/ws?ConnectionId=12345678");
     //开启连接
     webSocket.onopen = function (e) {
         document.getElementById("content").innerHTML = "webSocket is open";

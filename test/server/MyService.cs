@@ -19,7 +19,7 @@ namespace server
         public override async Task OnConnectionBeginAsync(WebSocketClient client)
         {
             await base.OnConnectionBeginAsync(client);
-           // logger.LogInformation($"{ConnectionId}:成功连接");
+            // logger.LogInformation($"{ConnectionId}:成功连接");
         }
 
         public override Task OnDisConnectionAsync(WebSocketClient client)
@@ -38,7 +38,7 @@ namespace server
         }
         public async Task sendAll(SendMsg sendMsg)
         {
-           // logger.LogInformation($"{ConnectionId}:发送所有人消息");
+            // logger.LogInformation($"{ConnectionId}:发送所有人消息");
             await Client.All.SendAsync(sendMsg.msg);
         }
         public async Task join(SendMsg sendMsg)
@@ -54,6 +54,12 @@ namespace server
         {
             logger.LogInformation($"{ConnectionId}:发送指定连接的之外的其它用户消息");
             await Client.Other.SendAsync(sendMsg.connectionId, sendMsg.msg);
+        }
+
+        public async Task current(SendMsg sendMsg)
+        {
+            logger.LogInformation($"{ConnectionId}:发送给指定的用户");
+            await Client.Current.SendAsync(sendMsg.connectionId, sendMsg.msg);
         }
         private async Task send2()
         {
