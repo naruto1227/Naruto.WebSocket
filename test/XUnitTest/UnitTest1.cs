@@ -6,6 +6,7 @@ using System.Net.WebSockets;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
+using System.Collections.Concurrent;
 
 namespace XUnitTest
 {
@@ -15,11 +16,11 @@ namespace XUnitTest
         public async Task Test1()
         {
             List<ClientWebSocket> s = new List<ClientWebSocket>();
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 5000; i++)
             {
                 ClientWebSocket webSocket = new ClientWebSocket();
                 s.Add(webSocket);
-                await webSocket.ConnectAsync(new Uri("ws://localhost:5000/ws"), CancellationToken.None);
+                await webSocket.ConnectAsync(new Uri("ws://localhost:5003/ws"), CancellationToken.None);
             }
 
         }

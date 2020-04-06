@@ -17,9 +17,8 @@ namespace Naruto.WebSocket.Interface
         /// <summary>
         /// 订阅消息
         /// </summary>
-        /// <param name="key">订阅的key</param>
         /// <returns></returns>
-        Task SubscribeAsync(string key);
+        Task SubscribeMessageAsync();
 
         /// <summary>
         /// 发布消息

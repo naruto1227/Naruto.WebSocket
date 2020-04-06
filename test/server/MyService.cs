@@ -19,7 +19,7 @@ namespace server
         public override async Task OnConnectionBeginAsync(WebSocketClient client)
         {
             await base.OnConnectionBeginAsync(client);
-            logger.LogInformation($"{ConnectionId}:成功连接");
+           // logger.LogInformation($"{ConnectionId}:成功连接");
         }
 
         public override Task OnDisConnectionAsync(WebSocketClient client)
@@ -27,11 +27,6 @@ namespace server
             return base.OnDisConnectionAsync(client);
         }
         public void Dispose()
-        {
-
-        }
-
-        public async Task Recive(string str)
         {
 
         }

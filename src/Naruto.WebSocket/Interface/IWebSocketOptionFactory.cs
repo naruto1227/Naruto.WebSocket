@@ -11,7 +11,7 @@ namespace Naruto.WebSocket.Interface
     /// 2020-04-03
     /// 获取配置工厂
     /// </summary>
-    public interface IWebSocketOptionFactory
+    public interface IWebSocketOptionFactory : IDisposable
     {
 
         Task<WebSocketOption> GetAsync(string key);

@@ -12,7 +12,7 @@ namespace Naruto.WebSocket.Interface
     /// 2020-04-04
     /// 存储每一个websocketclient的集合数据
     /// </summary>
-    public interface IWebSocketClientStorage
+    public interface IWebSocketClientStorage : IDisposable
     {
         /// <summary>
         /// 添加一个新的客户端

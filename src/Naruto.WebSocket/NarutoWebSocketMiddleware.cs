@@ -57,7 +57,7 @@ namespace Naruto.WebSocket
         {
             //根据请求地址获取租户信息
             //验证请求地址
-            if (PathCache.Match(context.Request.Path))
+            if (TenantPathCache.Match(context.Request.Path))
             {
                 //验证是否为websocket请求
                 if (context.WebSockets.IsWebSocketRequest)

@@ -14,7 +14,7 @@ namespace Naruto.WebSocket.Internal.Storage
     /// </summary>
     public class InMemoryWebSocketClientStorage<TService> : IWebSocketClientStorage<TService> where TService : NarutoWebSocketService
     {
-        private ConcurrentDictionary<Guid, WebSocketClient> webSocketClients = new ConcurrentDictionary<Guid, WebSocketClient>();
+        private static readonly ConcurrentDictionary<Guid, WebSocketClient> webSocketClients = new ConcurrentDictionary<Guid, WebSocketClient>();
 
         /// <summary>
         /// 添加一个新的客户端
@@ -115,6 +115,11 @@ namespace Naruto.WebSocket.Internal.Storage
                 return GetAllAsync();
             }
             return Task.FromResult(webSocketClients.Where(a => !connectionId.Contains(a.Value.ConnectionId)).Select(a => a.Value.WebSocket).ToList());
+        }
+
+        public void Dispose()
+        {
+            webSocketClients?.Clear();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Naruto.WebSocket.Interface
     /// 2020-04-04
     /// 群组的存储操作
     /// </summary>
-    public interface IGroupStorage
+    public interface IGroupStorage : IDisposable
     {
         /// <summary>
         /// 添加连接到群组

@@ -18,12 +18,8 @@ namespace Naruto.WebSocket.Internal.Storage
         /// <summary>
         /// 存储群组和连接的数据
         /// </summary>
-        private readonly ConcurrentDictionary<string, List<string>> cache;
+        private static readonly ConcurrentDictionary<string, List<string>> cache = new ConcurrentDictionary<string, List<string>>();
 
-        public InMemoryGroupStorage()
-        {
-            cache = new ConcurrentDictionary<string, List<string>>();
-        }
         public async Task AddAsync(string groupId, string connectionId)
         {
             if (string.IsNullOrWhiteSpace(groupId) || string.IsNullOrWhiteSpace(connectionId))
@@ -63,6 +59,11 @@ namespace Naruto.WebSocket.Internal.Storage
             {
                 connections.AddRange(connectionIds);
             }
+        }
+
+        public void Dispose()
+        {
+            cache?.Clear();
         }
 
         public Task<List<string>> GetAsync(string groupId)

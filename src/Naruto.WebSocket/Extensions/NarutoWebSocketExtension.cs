@@ -58,7 +58,12 @@ namespace Naruto.WebSocket.Extensions
                 services.AddSingleton(typeof(IOtherClient<>), typeof(InMemoryOtherClient<>));
                 services.AddSingleton(typeof(ICurrentClient<>), typeof(InMemoryCurrentClient<>));
                 services.AddSingleton(typeof(IGroupClient<>), typeof(InMemoryGroupClient<>));
+                services.AddSingleton(typeof(IClusterAllClient<>), typeof(InMemoryAllClient<>));
+                services.AddSingleton(typeof(IClusterOtherClient<>), typeof(InMemoryOtherClient<>));
+                services.AddSingleton(typeof(IClusterCurrentClient<>), typeof(InMemoryCurrentClient<>));
+                services.AddSingleton(typeof(IClusterGroupClient<>), typeof(InMemoryGroupClient<>));
 
+                services.AddSingleton<IEventBusProxy, EventBusProxy>();
                 services.AddSingleton<IMessageReviceHandler, MessageReviceHandler>();
                 services.AddSingleton<IWebSocketOptionFactory, WebSocketOptionFactory>();
             }
@@ -69,11 +74,12 @@ namespace Naruto.WebSocket.Extensions
             WebSocketOption webSocketOption = new WebSocketOption();
             option?.Invoke(webSocketOption);
             //匹配是否存在
-            if (!PathCache.Match(webSocketOption.Path))
+            if (!TenantPathCache.Match(webSocketOption.Path))
             {
-                //添加进路由缓存
-                PathCache.Add(webSocketOption.Path);
+                //获取服务类型
                 webSocketOption.ServiceType = typeof(TService);
+                //添加进路由缓存
+                TenantPathCache.Add(webSocketOption.Path, webSocketOption.ServiceType);
                 //注入配置服务
                 services.Add(new ServiceDescriptor(MergeNamedType.Merge(webSocketOption.Path.ToString(), typeof(WebSocketOption)), serviceProvider => webSocketOption, ServiceLifetime.Singleton));
             }

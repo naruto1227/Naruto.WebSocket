@@ -14,15 +14,15 @@ namespace Naruto.WebSocket.Internal
         /// <summary>
         /// 存储配置
         /// </summary>
-        private readonly ConcurrentDictionary<string, WebSocketOption> cache;
+        private static readonly ConcurrentDictionary<string, WebSocketOption> cache = new ConcurrentDictionary<string, WebSocketOption>();
 
         private readonly IServiceProvider serviceProvider;
 
         public WebSocketOptionFactory(IServiceProvider _serviceProvider)
         {
             serviceProvider = _serviceProvider;
-            cache = new ConcurrentDictionary<string, WebSocketOption>();
         }
+
         /// <summary>
         /// 获取配置信息
         /// </summary>
@@ -41,6 +41,10 @@ namespace Naruto.WebSocket.Internal
                 return default;
             cache.TryAdd(key, option);
             return Task.FromResult(option);
+        }
+        public void Dispose()
+        {
+            cache?.Clear();
         }
     }
 }

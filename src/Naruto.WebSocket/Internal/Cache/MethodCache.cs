@@ -12,7 +12,7 @@ namespace Naruto.WebSocket.Internal.Cache
     /// </summary>
     public class MethodCache
     {
-        private static ConcurrentDictionary<string, MethodInfo> methods = new ConcurrentDictionary<string, MethodInfo>();
+        private static readonly ConcurrentDictionary<string, MethodInfo> methods = new ConcurrentDictionary<string, MethodInfo>();
 
         public static MethodInfo Get(Type service, string action)
         {

@@ -19,7 +19,7 @@ namespace Naruto.WebSocket.Redis
         /// <returns></returns>
         public static IServiceCollection AddNarutoWebSocketRedis(this IServiceCollection serviceDescriptors)
         {
-            serviceDescriptors.AddSingleton<IEventBus, RedisEventBus>();
+            serviceDescriptors.AddService();
             return serviceDescriptors;
         }
         /// <summary>
@@ -30,8 +30,17 @@ namespace Naruto.WebSocket.Redis
         public static IServiceCollection AddNarutoWebSocketRedis(this IServiceCollection serviceDescriptors, Action<RedisOptions> option)
         {
             serviceDescriptors.AddRedisRepository(option);
-            serviceDescriptors.AddSingleton<IEventBus, RedisEventBus>();
+            serviceDescriptors.AddService();
             return serviceDescriptors;
+        }
+
+        private static IServiceCollection AddService(this IServiceCollection serviceDescriptors)
+        {
+            serviceDescriptors.AddSingleton<IEventBus, RedisEventBus>();
+            serviceDescriptors.AddSingleton<ISubscribeMessageStorage, RedisSubscribeMessageStorage>();
+            serviceDescriptors.BuildServiceProvider().GetRequiredService<IEventBus>().SubscribeMessageAsync().Wait();
+            return serviceDescriptors;
+
         }
     }
 }
