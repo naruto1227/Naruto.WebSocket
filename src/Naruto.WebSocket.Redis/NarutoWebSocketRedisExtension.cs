@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Naruto.Redis.RedisConfig;
 using Naruto.WebSocket.Interface;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Naruto.WebSocket.Redis
 {
@@ -38,9 +40,16 @@ namespace Naruto.WebSocket.Redis
         {
             serviceDescriptors.AddSingleton<IEventBus, RedisEventBus>();
             serviceDescriptors.AddSingleton<ISubscribeMessageStorage, RedisSubscribeMessageStorage>();
-            serviceDescriptors.BuildServiceProvider().GetRequiredService<IEventBus>().SubscribeMessageAsync().Wait();
             return serviceDescriptors;
-
+        }
+        /// <summary>
+        /// 启用订阅
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static async Task UseNarutoWebSocketSubscribe(this IApplicationBuilder builder)
+        {
+            await builder.ApplicationServices.GetRequiredService<IEventBus>().SubscribeMessageAsync();
         }
     }
 }

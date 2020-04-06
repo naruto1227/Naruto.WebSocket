@@ -33,12 +33,12 @@ namespace server
 
         public async Task send(SendMsg sendMsg)
         {
-            logger.LogInformation($"{ConnectionId}:发送群组消息");
+            //logger.LogInformation($"{ConnectionId}:发送群组消息");
             await Client.Group.SendAsync(sendMsg.roomId, sendMsg.msg);
         }
         public async Task sendAll(SendMsg sendMsg)
         {
-            logger.LogInformation($"{ConnectionId}:发送所有人消息");
+           // logger.LogInformation($"{ConnectionId}:发送所有人消息");
             await Client.All.SendAsync(sendMsg.msg);
         }
         public async Task join(SendMsg sendMsg)
