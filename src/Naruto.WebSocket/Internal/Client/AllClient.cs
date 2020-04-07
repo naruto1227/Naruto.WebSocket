@@ -18,14 +18,14 @@ namespace Naruto.WebSocket.Internal.Client
     /// 单机版给所有人发消息
     /// </summary>
     /// <typeparam name="TService"></typeparam>
-    public class InMemoryAllClient<TService> : IAllClient<TService>, IClusterAllClient<TService> where TService : NarutoWebSocketService
+    public class AllClient<TService> : IAllClient<TService>, IClusterAllClient<TService> where TService : NarutoWebSocketService
     {
         /// <summary>
         /// webscoket 客户端存储
         /// </summary>
         private readonly IWebSocketClientStorage socketClientStorage;
 
-        private readonly ILogger<InMemoryAllClient<TService>> logger;
+        private readonly ILogger<AllClient<TService>> logger;
 
         /// <summary>
         /// 定义一个当前服务对应的租户请求path字段
@@ -36,7 +36,7 @@ namespace Naruto.WebSocket.Internal.Client
         /// </summary>
         private readonly IEventBusProxy eventBusProxy;
 
-        public InMemoryAllClient(IWebSocketClientStorage<TService> _socketClientStorage, IEventBusProxy _eventBusProxy, ILogger<InMemoryAllClient<TService>> _logger)
+        public AllClient(IWebSocketClientStorage<TService> _socketClientStorage, IEventBusProxy _eventBusProxy, ILogger<AllClient<TService>> _logger)
         {
             socketClientStorage = _socketClientStorage;
             RequestPath = TenantPathCache.GetByType(typeof(TService));

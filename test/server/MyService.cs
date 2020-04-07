@@ -33,6 +33,7 @@ namespace server
 
         public async Task send(SendMsg sendMsg)
         {
+            await Reply.SendAsync("回复");
             //logger.LogInformation($"{ConnectionId}:发送群组消息");
             await Client.Group.SendAsync(sendMsg.roomId, sendMsg.msg);
         }

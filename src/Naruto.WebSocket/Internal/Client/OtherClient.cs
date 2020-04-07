@@ -15,7 +15,7 @@ namespace Naruto.WebSocket.Internal.Client
     /// 发送给指定连接外的其它用户
     /// </summary>
     /// <typeparam name="TService"></typeparam>
-    public class InMemoryOtherClient<TService> : IOtherClient<TService>, IClusterOtherClient<TService> where TService : NarutoWebSocketService
+    public class OtherClient<TService> : IOtherClient<TService>, IClusterOtherClient<TService> where TService : NarutoWebSocketService
     {
         /// <summary>
         /// webscoket 客户端存储
@@ -31,7 +31,7 @@ namespace Naruto.WebSocket.Internal.Client
         private readonly IEventBusProxy eventBusProxy;
 
 
-        public InMemoryOtherClient(IWebSocketClientStorage<TService> _socketClientStorage, IEventBusProxy _eventBusProxy)
+        public OtherClient(IWebSocketClientStorage<TService> _socketClientStorage, IEventBusProxy _eventBusProxy)
         {
             socketClientStorage = _socketClientStorage;
             RequestPath = TenantPathCache.GetByType(typeof(TService));

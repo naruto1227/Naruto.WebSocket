@@ -109,6 +109,11 @@ namespace Naruto.WebSocket
             await clientStorage.AddAsync(key, webSocketClient);
             //获取服务
             var messageRevice = context.RequestServices.GetRequiredService<IMessageReviceHandler>();
+            #region 获取当前上下文实体 配置数据信息
+            var currentContext = context.RequestServices.GetRequiredService(typeof(CurrentContext<>).MakeGenericType(TenantPathCache.GetByKey(context.Request.Path))) as CurrentContext;
+            currentContext.WebSocketClient = webSocketClient;
+            currentContext.Key = key;
+            #endregion
             try
             {
                 //调用开启连接的方法

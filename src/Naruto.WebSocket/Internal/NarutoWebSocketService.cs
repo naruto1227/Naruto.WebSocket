@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Naruto.WebSocket.Interface;
+using Naruto.WebSocket.Interface.Client;
 using Naruto.WebSocket.Object;
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,11 @@ namespace Naruto.WebSocket.Internal
         /// </summary>
 
         protected IClientSend Client { get; private set; }
+        /// <summary>
+        /// 回复的客户端
+        /// </summary>
 
+        protected IReplyClient Reply { get; private set; }
 
         public NarutoWebSocketService()
         {
@@ -52,11 +57,17 @@ namespace Naruto.WebSocket.Internal
         /// <returns></returns>
         public virtual Task OnConnectionBeginAsync(WebSocketClient client)
         {
-            //初始化数据
+
+            #region 初始化数据
+
             Context = client.Context;
             ConnectionId = client.ConnectionId;
             Group = Context.RequestServices.GetRequiredService(typeof(IGroupStorage<>).MakeGenericType(GenericType)) as IGroupStorage;
             Client = Context.RequestServices.GetRequiredService(typeof(IClientSend<>).MakeGenericType(GenericType)) as IClientSend;
+            Client = Context.RequestServices.GetRequiredService(typeof(IClientSend<>).MakeGenericType(GenericType)) as IClientSend;
+            Reply = Context.RequestServices.GetRequiredService(typeof(IReplyClient<>).MakeGenericType(GenericType)) as IReplyClient;
+            #endregion
+
             return Task.CompletedTask;
         }
         /// <summary>

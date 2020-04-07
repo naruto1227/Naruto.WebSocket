@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Naruto.WebSocket.Internal.Client
 {
-    public class InMemoryCurrentClient<TService> : ICurrentClient<TService>, IClusterCurrentClient<TService> where TService : NarutoWebSocketService
+    public class CurrentClient<TService> : ICurrentClient<TService>, IClusterCurrentClient<TService> where TService : NarutoWebSocketService
     {
         /// <summary>
         /// webscoket 客户端存储
@@ -24,7 +24,7 @@ namespace Naruto.WebSocket.Internal.Client
         /// 事件总线代理对象
         /// </summary>
         private readonly IEventBusProxy eventBusProxy;
-        public InMemoryCurrentClient(IWebSocketClientStorage<TService> _socketClientStorage, IEventBusProxy _eventBusProxy)
+        public CurrentClient(IWebSocketClientStorage<TService> _socketClientStorage, IEventBusProxy _eventBusProxy)
         {
             socketClientStorage = _socketClientStorage;
             RequestPath = TenantPathCache.GetByType(typeof(TService));

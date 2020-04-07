@@ -52,20 +52,21 @@ namespace Naruto.WebSocket.Extensions
             {
                 services.AddSingleton(typeof(IGroupStorage<>), typeof(InMemoryGroupStorage<>));
                 services.AddSingleton(typeof(IWebSocketClientStorage<>), typeof(InMemoryWebSocketClientStorage<>));
-
                 services.AddSingleton(typeof(IClientSend<>), typeof(ClientSend<>));
-                services.AddSingleton(typeof(IAllClient<>), typeof(InMemoryAllClient<>));
-                services.AddSingleton(typeof(IOtherClient<>), typeof(InMemoryOtherClient<>));
-                services.AddSingleton(typeof(ICurrentClient<>), typeof(InMemoryCurrentClient<>));
-                services.AddSingleton(typeof(IGroupClient<>), typeof(InMemoryGroupClient<>));
-                services.AddSingleton(typeof(IClusterAllClient<>), typeof(InMemoryAllClient<>));
-                services.AddSingleton(typeof(IClusterOtherClient<>), typeof(InMemoryOtherClient<>));
-                services.AddSingleton(typeof(IClusterCurrentClient<>), typeof(InMemoryCurrentClient<>));
-                services.AddSingleton(typeof(IClusterGroupClient<>), typeof(InMemoryGroupClient<>));
-
+                services.AddSingleton(typeof(IAllClient<>), typeof(AllClient<>));
+                services.AddSingleton(typeof(IOtherClient<>), typeof(OtherClient<>));
+                services.AddSingleton(typeof(ICurrentClient<>), typeof(CurrentClient<>));
+                services.AddSingleton(typeof(IGroupClient<>), typeof(GroupClient<>));
+                services.AddSingleton(typeof(IClusterAllClient<>), typeof(AllClient<>));
+                services.AddSingleton(typeof(IClusterOtherClient<>), typeof(OtherClient<>));
+                services.AddSingleton(typeof(IClusterCurrentClient<>), typeof(CurrentClient<>));
+                services.AddSingleton(typeof(IClusterGroupClient<>), typeof(GroupClient<>));
                 services.AddSingleton<IEventBusProxy, EventBusProxy>();
                 services.AddSingleton<IMessageReviceHandler, MessageReviceHandler>();
                 services.AddSingleton<IWebSocketOptionFactory, WebSocketOptionFactory>();
+
+                services.AddScoped(typeof(CurrentContext<>));
+                services.AddScoped(typeof(IReplyClient<>), typeof(ReplyClient<>));
             }
 
             services.AddScoped<TService>();

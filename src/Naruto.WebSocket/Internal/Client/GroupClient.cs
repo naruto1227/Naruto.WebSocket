@@ -15,7 +15,7 @@ namespace Naruto.WebSocket.Internal.Client
     /// 群组成员发送消息
     /// </summary>
     /// <typeparam name="TService"></typeparam>
-    public class InMemoryGroupClient<TService> : IGroupClient<TService>, IClusterGroupClient<TService> where TService : NarutoWebSocketService
+    public class GroupClient<TService> : IGroupClient<TService>, IClusterGroupClient<TService> where TService : NarutoWebSocketService
     {
         private readonly IWebSocketClientStorage socketClientStorage;
 
@@ -29,7 +29,7 @@ namespace Naruto.WebSocket.Internal.Client
         /// 事件总线代理对象
         /// </summary>
         private readonly IEventBusProxy eventBusProxy;
-        public InMemoryGroupClient(IWebSocketClientStorage<TService> _socketClientStorage, IGroupStorage<TService> _groupStorage, IEventBusProxy _eventBusProxy)
+        public GroupClient(IWebSocketClientStorage<TService> _socketClientStorage, IGroupStorage<TService> _groupStorage, IEventBusProxy _eventBusProxy)
         {
             socketClientStorage = _socketClientStorage;
             groupStorage = _groupStorage;
