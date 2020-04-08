@@ -44,6 +44,11 @@
         };
         webSocket.send(JSON.stringify(msg));
 ```
+5. 用户可以在创建websocket客户端的时候主动传递一个当前websocket的连接Id，不传递则由后台自动生成
+```javascript
+    //主动传递一个连接Id的值ConnectionId
+     var webSocket = new WebSocket("ws://localhost:5003/ws?ConnectionId=12345678");
+```
 #### 参与贡献
 
 1.  Fork 本仓库
