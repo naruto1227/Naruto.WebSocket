@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Naruto.WebSocket;
 using Naruto.WebSocket.Extensions;
 using Naruto.WebSocket.Redis;
 
@@ -38,6 +39,18 @@ namespace server
             app.UseNarutoWebSocket();
             //启用订阅
             await app.UseNarutoWebSocketSubscribe();
+            NarutoWebSocketEvent.RegisterOnLine(a =>
+            {
+                Console.WriteLine($"{a.ConnectionId}:上线");
+            });
+            NarutoWebSocketEvent.RegisterOnLine(a =>
+            {
+                Console.WriteLine($"{a.ConnectionId}:上线");
+            });
+            NarutoWebSocketEvent.RegisterOffLine(a =>
+            {
+                Console.WriteLine($"{a.ConnectionId}:下线");
+            });
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

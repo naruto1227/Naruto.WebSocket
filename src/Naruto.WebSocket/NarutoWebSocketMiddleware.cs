@@ -116,6 +116,8 @@ namespace Naruto.WebSocket
             #endregion
             try
             {
+                //触发上线通知
+                NarutoWebSocketEvent.OnLineEvent?.Invoke(webSocketClient);
                 //调用开启连接的方法
                 await messageRevice.HandlerAsync(context, webSocketClient, new ReciveMessageBase { action = NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString() }.ToJson()).ConfigureAwait(false);
 
@@ -145,6 +147,8 @@ namespace Naruto.WebSocket
                 await messageRevice.HandlerAsync(context, webSocketClient, new ReciveMessageBase { action = NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString() }.ToJson()).ConfigureAwait(false);
                 //当连接不是开启的状态就移除
                 await clientStorage.RemoveAsync(key);
+                //下线的通知
+                NarutoWebSocketEvent.OffLineEvent?.Invoke(webSocketClient);
             }
         }
     }
