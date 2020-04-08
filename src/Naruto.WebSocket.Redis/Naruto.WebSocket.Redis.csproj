@@ -7,9 +7,10 @@
     <Authors>zhanghaibo</Authors>
     <PackageProjectUrl>https://github.com/zhanghaiboshiwo/Naruto.WebSocket</PackageProjectUrl>
     <RepositoryUrl>https://github.com/zhanghaiboshiwo/Naruto.WebSocket</RepositoryUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Naruto.Redis" Version="1.0.1" />
-    <PackageReference Include="Naruto.WebSocket" Version="1.0.0" />
+    <PackageReference Include="Naruto.WebSocket" Version="1.0.1" />
   </ItemGroup>
 </Project>
