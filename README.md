@@ -25,7 +25,8 @@
             //在管道中启用中间件
              app.UseNarutoWebSocket();
 ```
-3. 集群版,安装Nuget包<b>Naruto.WebSocket.Redis</b>,然后还需注入
+3. 使用<b>IClientSend\<TService></b>可以直接从外围操作消息的发送
+4. 集群版,安装Nuget包<b>Naruto.WebSocket.Redis</b>,然后还需注入
 ```c#
             //注入集群版需要的服务
             services.AddNarutoWebSocketRedis(a => a.Connection = new string[] { "127.0.0.1:6379" });
@@ -35,7 +36,7 @@
             await app.UseNarutoWebSocketSubscribe();
 
 ```
-4. 客户端使用当客户端发送websocket消息的时候，数据格式为json格式数据，并且必须包含一个action的key，当前action指定的是当前发送的消息，指派给后端实现了<b>NarutoWebSocketService</b>的对象的对应方法来处理。
+5. 客户端使用当客户端发送websocket消息的时候，数据格式为json格式数据，并且必须包含一个action的key，当前action指定的是当前发送的消息，指派给后端实现了<b>NarutoWebSocketService</b>的对象的对应方法来处理。
 ``` javascript
     //当前的写法的含义是发送给后端的leave方法处理websocket的发送的消息，参数为一个对象中包含的属性为roomId
      var msg = {
@@ -44,7 +45,7 @@
         };
         webSocket.send(JSON.stringify(msg));
 ```
-5. 用户可以在创建websocket客户端的时候主动传递一个当前websocket的连接Id，不传递则由后台自动生成
+6. 用户可以在创建websocket客户端的时候主动传递一个当前websocket的连接Id，不传递则由后台自动生成
 ```javascript
     //主动传递一个连接Id的值ConnectionId
      var webSocket = new WebSocket("ws://localhost:5003/ws?ConnectionId=12345678");
