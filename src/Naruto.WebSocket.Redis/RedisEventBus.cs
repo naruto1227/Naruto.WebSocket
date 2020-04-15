@@ -33,7 +33,7 @@ namespace Naruto.WebSocket.Redis
 
         public RedisEventBus(IRedisRepository _redisRepository, ILogger<RedisEventBus> _logger, IServiceProvider _serviceProvider, ISubscribeMessageStorage _messageStorage)
         {
-            redisSubscribe = _redisRepository.Subscribe();
+            redisSubscribe = _redisRepository.Subscribe;
             logger = _logger;
             serviceProvider = _serviceProvider;
             messageStorage = _messageStorage;

@@ -10,7 +10,7 @@
     <Version>1.0.1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Naruto.Redis" Version="1.0.1" />
+    <PackageReference Include="Naruto.Redis" Version="1.0.1.2" />
     <PackageReference Include="Naruto.WebSocket" Version="1.0.1" />
   </ItemGroup>
 </Project>

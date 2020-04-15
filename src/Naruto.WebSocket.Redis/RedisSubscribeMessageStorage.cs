@@ -38,7 +38,7 @@ namespace Naruto.WebSocket.Redis
             {
                 throw new ArgumentNullException(nameof(key));
             }
-            return await redisRepository.String().GetAsync<SubscribeMessage>(KeyPrefix + key);
+            return await redisRepository.String.GetAsync<SubscribeMessage>(KeyPrefix + key);
         }
         /// <summary>
         /// 存储消息
@@ -57,7 +57,7 @@ namespace Naruto.WebSocket.Redis
                 throw new ArgumentNullException(nameof(subscribeMessage));
             }
             //存储消息，并设置90s有效期
-            await redisRepository.String().AddAsync(KeyPrefix + key, subscribeMessage, TimeSpan.FromSeconds(90));
+            await redisRepository.String.AddAsync(KeyPrefix + key, subscribeMessage, TimeSpan.FromSeconds(90));
         }
     }
 }
