@@ -21,8 +21,8 @@ namespace Naruto.WebSocket
         /// <param name="webSocket"></param>
         public static async Task SendMessage(this System.Net.WebSockets.WebSocket webSocket, string message, WebSocketMessageType webSocketMessageType = WebSocketMessageType.Text)
         {
-            var msg = Encoding.UTF8.GetBytes(message);
-            await webSocket.SendAsync(msg, webSocketMessageType, true, CancellationToken.None);
+            //发送
+            await webSocket.SendAsync(Encoding.UTF8.GetBytes(message), webSocketMessageType, true, CancellationToken.None);
         }
     }
 }

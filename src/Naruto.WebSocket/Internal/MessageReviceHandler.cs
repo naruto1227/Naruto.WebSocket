@@ -36,17 +36,17 @@ namespace Naruto.WebSocket.Internal
         /// <param name="webSocketClient"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        public async Task HandlerAsync(HttpContext context, WebSocketClient webSocketClient, string msg)
+        public async Task HandlerAsync(WebSocketClient webSocketClient, string msg)
         {
             //获取基类消息
             var reciveMessageBase = msg.ToDeserialize<ReciveMessageBase>();
 
             //获取配置
-            var webSocketOption = await webSocketOptionFactory.GetAsync(context.Request.Path);
+            var webSocketOption = await webSocketOptionFactory.GetAsync(webSocketClient.Context.Request.Path);
             if (webSocketOption == null)
-                throw new NotFoundOptionsException($"{context.Request.Path}：找不到对应的ws配置");
+                throw new NotFoundOptionsException($"{webSocketClient.Context.Request.Path}：找不到对应的ws配置");
             //获取当前租户的服务对象信息
-            var service = context.RequestServices.GetRequiredService(webSocketOption.ServiceType);
+            var service = webSocketClient.Context.RequestServices.GetRequiredService(webSocketOption.ServiceType);
 
             //验证消息是否为内部的消息
             if (reciveMessageBase.action.Equals(NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString()) || reciveMessageBase.action.Equals(NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString()))

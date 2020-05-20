@@ -25,7 +25,7 @@ namespace server
                 a.Path = new PathString("/ws");
                 a.AuthorizationFilters.Add(new MyAuthorizationFilters());
             });
-            services.AddNarutoWebSocketRedis(a => a.Connection = new string[] { "127.0.0.1:6379" });
+            //services.AddNarutoWebSocketRedis(a => a.Connection = new string[] { "127.0.0.1:6379" });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,11 +38,7 @@ namespace server
 
             app.UseNarutoWebSocket();
             //启用订阅
-            await app.UseNarutoWebSocketSubscribe();
-            NarutoWebSocketEvent.RegisterOnLine(a =>
-            {
-                Console.WriteLine($"{a.ConnectionId}:上线");
-            });
+            // await app.UseNarutoWebSocketSubscribe();
             NarutoWebSocketEvent.RegisterOnLine(a =>
             {
                 Console.WriteLine($"{a.ConnectionId}:上线");
@@ -51,6 +47,10 @@ namespace server
             {
                 Console.WriteLine($"{a.ConnectionId}:下线");
             });
+            //NarutoWebSocketEvent.RegisterRecive((client, msg) =>
+            //{
+            //    Console.WriteLine(msg);
+            //});
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
