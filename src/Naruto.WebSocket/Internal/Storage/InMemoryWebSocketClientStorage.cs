@@ -1,4 +1,5 @@
-﻿using Naruto.WebSocket.Interface;
+﻿using Microsoft.Extensions.Logging;
+using Naruto.WebSocket.Interface;
 using Naruto.WebSocket.Object;
 using System;
 using System.Collections.Concurrent;
@@ -16,6 +17,12 @@ namespace Naruto.WebSocket.Internal.Storage
     {
         private static readonly ConcurrentDictionary<Guid, WebSocketClient> webSocketClients = new ConcurrentDictionary<Guid, WebSocketClient>();
 
+        private readonly ILogger logger;
+
+        public InMemoryWebSocketClientStorage(ILogger<InMemoryWebSocketClientStorage<TService>> _logger)
+        {
+            logger = _logger;
+        }
         /// <summary>
         /// 添加一个新的客户端
         /// </summary>
@@ -119,7 +126,16 @@ namespace Naruto.WebSocket.Internal.Storage
 
         public void Dispose()
         {
-            webSocketClients?.Clear();
+            if (webSocketClients != null)
+            {
+                logger.LogInformation("开始释放socket资源");
+                foreach (var item in webSocketClients)
+                {
+                    item.Value.WebSocket?.Abort();
+                    item.Value.WebSocket?.Dispose();
+                }
+                webSocketClients.Clear();
+            }
         }
     }
 }
