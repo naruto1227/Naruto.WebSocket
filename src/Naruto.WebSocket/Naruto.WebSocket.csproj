@@ -5,7 +5,7 @@
     <Authors>zhanghaibo</Authors>
     <Description>基于.net core 3.1的一个websocket中间件框架，支持群聊，所有人，指定用户发送连接，支持用户主动传递连接Id</Description>
     <RepositoryUrl>https://github.com/zhanghaiboshiwo/Naruto.WebSocket</RepositoryUrl>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

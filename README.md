@@ -20,10 +20,6 @@
                 a.Path = new PathString("/ws");//websocket的请求路径
                 a.AuthorizationFilters.Add(new MyAuthorizationFilters());//追加websocket连接的授权信息
             });
-
-
-            //在管道中启用中间件
-             app.UseNarutoWebSocket();
 ```
 3. 使用<b>IClientSend\<TService></b>可以直接从外围操作消息的发送
 4. 集群版,安装Nuget包<b>Naruto.WebSocket.Redis</b>,然后还需注入
