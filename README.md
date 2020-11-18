@@ -28,9 +28,6 @@
             services.AddNarutoWebSocketRedis(a => a.Connection = new string[] { "127.0.0.1:6379" });
 
 
-            //在管道中启用订阅
-            await app.UseNarutoWebSocketSubscribe();
-
 ```
 5. 客户端使用当客户端发送websocket消息的时候，数据格式为json格式数据，并且必须包含一个action的key，当前action指定的是当前发送的消息，指派给后端实现了<b>NarutoWebSocketService</b>的对象的对应方法来处理。
 ``` javascript
