@@ -55,7 +55,7 @@ namespace Naruto.WebSocket.Internal
         /// 开始连接
         /// </summary>
         /// <returns></returns>
-        public virtual Task OnConnectionBeginAsync(WebSocketClient client)
+        protected virtual Task OnConnectionBeginAsync(WebSocketClient client)
         {
 
             #region 初始化数据
@@ -63,7 +63,6 @@ namespace Naruto.WebSocket.Internal
             Context = client.Context;
             ConnectionId = client.ConnectionId;
             Group = Context.RequestServices.GetRequiredService(typeof(IGroupStorage<>).MakeGenericType(GenericType)) as IGroupStorage;
-            Client = Context.RequestServices.GetRequiredService(typeof(IClientSend<>).MakeGenericType(GenericType)) as IClientSend;
             Client = Context.RequestServices.GetRequiredService(typeof(IClientSend<>).MakeGenericType(GenericType)) as IClientSend;
             Reply = Context.RequestServices.GetRequiredService(typeof(IReplyClient<>).MakeGenericType(GenericType)) as IReplyClient;
             #endregion
@@ -75,7 +74,7 @@ namespace Naruto.WebSocket.Internal
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        public virtual Task OnDisConnectionAsync(WebSocketClient client)
+        protected virtual Task OnDisConnectionAsync(WebSocketClient client)
         {
             return Task.CompletedTask;
         }
