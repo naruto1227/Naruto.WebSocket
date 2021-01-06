@@ -16,12 +16,12 @@ namespace server
         {
             logger = _logger;
         }
-        public override Task OnConnectionBeginAsync(WebSocketClient client)
+        protected override Task OnConnectionBeginAsync(WebSocketClient client)
         {
             return base.OnConnectionBeginAsync(client);
         }
 
-        public override Task OnDisConnectionAsync(WebSocketClient client)
+        protected override Task OnDisConnectionAsync(WebSocketClient client)
         {
             return base.OnDisConnectionAsync(client);
         }

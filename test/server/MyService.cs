@@ -16,13 +16,13 @@ namespace server
         {
             logger = _logger;
         }
-        public override async Task OnConnectionBeginAsync(WebSocketClient client)
+        protected override async Task OnConnectionBeginAsync(WebSocketClient client)
         {
             await base.OnConnectionBeginAsync(client);
             // logger.LogInformation($"{ConnectionId}:成功连接");
         }
 
-        public override Task OnDisConnectionAsync(WebSocketClient client)
+        protected override Task OnDisConnectionAsync(WebSocketClient client)
         {
             return base.OnDisConnectionAsync(client);
         }
@@ -30,7 +30,10 @@ namespace server
         {
 
         }
+        protected async Task sss()
+        {
 
+        }
         public async Task send(SendMsg sendMsg)
         {
             await Reply.SendAsync("回复");

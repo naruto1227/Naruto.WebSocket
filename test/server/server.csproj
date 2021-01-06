@@ -5,6 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Naruto.WebSocket.Redis\Naruto.WebSocket.Redis.csproj" />
+    <ProjectReference Include="..\..\src\Naruto.WebSocket\Naruto.WebSocket.csproj" />
   </ItemGroup>
 </Project>
