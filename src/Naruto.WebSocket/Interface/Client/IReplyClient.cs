@@ -15,9 +15,10 @@ namespace Naruto.WebSocket.Interface.Client
         /// <summary>
         /// 给当前的连接回复消息
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="execAction">调用的方法</param>
+        /// <param name="msg">消息的信息</param>
         /// <returns></returns>
-        Task SendAsync(string msg);
+        Task SendAsync(string execAction, object msg);
     }
 
     /// <summary>

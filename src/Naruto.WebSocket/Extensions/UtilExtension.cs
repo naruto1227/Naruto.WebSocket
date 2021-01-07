@@ -20,6 +20,25 @@ namespace Naruto.WebSocket.Extensions
             return Encoding.UTF8.GetString(source);
         }
         /// <summary>
+        /// 验证数据是否为空
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static bool IsNull(this object source)
+        {
+            return source == null;
+        }
+
+        /// <summary>
+        /// 验证数据是否为空
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty(this string source)
+        {
+            return string.IsNullOrWhiteSpace(source);
+        }
+        /// <summary>
         /// 反序列化
         /// </summary>
         /// <typeparam name="T"></typeparam>

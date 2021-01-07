@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Naruto.WebSocket;
 using Naruto.WebSocket.Extensions;
 using Naruto.WebSocket.Interface;
+using Naruto.WebSocket.Redis;
 //using Naruto.WebSocket.Redis;
 
 namespace server
@@ -26,7 +27,7 @@ namespace server
                 a.Path = new PathString("/ws");
                 a.AuthorizationFilters.Add(new MyAuthorizationFilters());
             });
-            //services.AddNarutoWebSocketRedis(a => a.Connection = new string[] { "127.0.0.1:6379" });
+            services.AddNarutoWebSocketRedis(a => a.Connection = new string[] { "127.0.0.1:6379" });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

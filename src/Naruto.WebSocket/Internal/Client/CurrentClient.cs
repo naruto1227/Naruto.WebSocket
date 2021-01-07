@@ -31,9 +31,9 @@ namespace Naruto.WebSocket.Internal.Client
             eventBusProxy = _eventBusProxy;
         }
 
-        public async Task SendAsync(string connectionId, string msg)
+        public async Task SendAsync(string connectionId, string execAction, object msg)
         {
-            await SendMessageAsync(connectionId, msg);
+            await SendMessageAsync(connectionId, execAction, msg);
             //发布事件
             await eventBusProxy.PublishAsync(new SubscribeMessage
             {
@@ -41,15 +41,19 @@ namespace Naruto.WebSocket.Internal.Client
                 SendTypeEnum = MessageSendTypeEnum.Current,
                 ParamterEntity = new ParamterEntity
                 {
-                    Message = msg,
+                    Message = new SendMessageModel
+                    {
+                        action = execAction,
+                        message = msg
+                    },
                     ConnectionId = connectionId
                 }
             });
         }
 
-        public async Task SendAsync(List<string> connectionIds, string msg)
+        public async Task SendAsync(List<string> connectionIds, string execAction, object msg)
         {
-            await SendMessageAsync(connectionIds, msg);
+            await SendMessageAsync(connectionIds, execAction, msg);
             //发布事件
             await eventBusProxy.PublishAsync(new SubscribeMessage
             {
@@ -57,28 +61,40 @@ namespace Naruto.WebSocket.Internal.Client
                 SendTypeEnum = MessageSendTypeEnum.Current,
                 ParamterEntity = new ParamterEntity
                 {
-                    Message = msg,
+                    Message = new SendMessageModel
+                    {
+                        action = execAction,
+                        message = msg
+                    },
                     ConnectionIds = connectionIds
                 },
                 ActionTypeEnum = MessageSendActionTypeEnum.Many
             });
         }
 
-        public async Task SendMessageAsync(string connectionId, string msg)
+        public async Task SendMessageAsync(string connectionId, string execAction, object msg)
         {
             var list = await socketClientStorage.GetByConnectionIdAsync(connectionId);
             foreach (var item in list)
             {
-                await item.SendMessage(msg);
+                await item.SendMessage(new Object.SendMessageModel
+                {
+                    message = msg,
+                    action = execAction
+                });
             }
         }
 
-        public async Task SendMessageAsync(List<string> connectionIds, string msg)
+        public async Task SendMessageAsync(List<string> connectionIds, string execAction, object msg)
         {
             var webSockets = await socketClientStorage.GetByConnectionIdAsync(connectionIds);
             Parallel.ForEach(webSockets, async item =>
             {
-                await item.SendMessage(msg);
+                await item.SendMessage(new Object.SendMessageModel
+                {
+                    message = msg,
+                    action = execAction
+                });
             });
         }
     }

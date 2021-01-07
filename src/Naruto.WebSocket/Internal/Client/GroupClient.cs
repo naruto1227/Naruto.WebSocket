@@ -38,9 +38,9 @@ namespace Naruto.WebSocket.Internal.Client
         }
 
 
-        public async Task SendAsync(string groupId, string msg)
+        public async Task SendAsync(string groupId, string execAction, object msg)
         {
-            await SendMessageAsync(groupId, msg);
+            await SendMessageAsync(groupId, execAction, msg);
 
             //发布事件
             await eventBusProxy.PublishAsync(new SubscribeMessage
@@ -49,13 +49,17 @@ namespace Naruto.WebSocket.Internal.Client
                 SendTypeEnum = MessageSendTypeEnum.Group,
                 ParamterEntity = new ParamterEntity
                 {
-                    Message = msg,
+                    Message = new SendMessageModel
+                    {
+                        action = execAction,
+                        message = msg
+                    },
                     GroupId = groupId
                 }
             });
         }
 
-        public async Task SendMessageAsync(string groupId, string msg)
+        public async Task SendMessageAsync(string groupId, string execAction, object msg)
         {
             //获取所有的连接
             var connections = await groupStorage.GetAsync(groupId);
@@ -69,7 +73,11 @@ namespace Naruto.WebSocket.Internal.Client
             {
                 Parallel.ForEach(webSockets, async item =>
                 {
-                    await item.SendMessage(msg);
+                    await item.SendMessage(new Object.SendMessageModel
+                    {
+                        message = msg,
+                        action = execAction
+                    });
                 });
             }
         }

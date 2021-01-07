@@ -39,8 +39,8 @@ namespace Naruto.WebSocket.Internal
         public async Task HandlerAsync(WebSocketClient webSocketClient, string msg)
         {
             //获取基类消息
-            var reciveMessageBase = msg.ToDeserialize<ReciveMessageBase>();
-            if (reciveMessageBase == null || string.IsNullOrWhiteSpace(reciveMessageBase.action))
+            var reciveMessageBase = msg.ToDeserialize<MessageBase>();
+            if (reciveMessageBase == null || reciveMessageBase.action.IsNullOrEmpty())
             {
                 throw new ArgumentNullException($"{msg}：传递的消息不符合约束");
             }
@@ -69,7 +69,7 @@ namespace Naruto.WebSocket.Internal
         /// <param name="webSocketClient"></param>
         /// <param name="reciveMessageBase"></param>
         /// <returns></returns>
-        private async Task EexecInternalMessage(object service, WebSocketClient webSocketClient, ReciveMessageBase reciveMessageBase)
+        private async Task EexecInternalMessage(object service, WebSocketClient webSocketClient, MessageBase reciveMessageBase)
         {
             //执行操作
             await NarutoWebSocketServiceExpression.ExecAsync(service, reciveMessageBase.action, webSocketClient).ConfigureAwait(false);
@@ -83,7 +83,7 @@ namespace Naruto.WebSocket.Internal
         /// <param name="reciveMessageBase"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        private async Task EexecReciveMessage(object service, WebSocketOption webSocketOption, ReciveMessageBase reciveMessageBase, string msg)
+        private async Task EexecReciveMessage(object service, WebSocketOption webSocketOption, MessageBase reciveMessageBase, string msg)
         {
             //获取方法
             var methodCacheInfo = MethodCache.Get(webSocketOption.ServiceType, reciveMessageBase.action);

@@ -4,18 +4,14 @@ using System.Text;
 
 namespace Naruto.WebSocket.Object
 {
-
     /// <summary>
-    /// 张海波
-    /// 2020-04-01
-    /// 消息的基类
+    /// 发送消息的实体模型
     /// </summary>
-    public class MessageBase
+    public class SendMessageModel : MessageBase
     {
         /// <summary>
-        /// 调用的方法
+        /// 消息的具体内容
         /// </summary>
-        public string action { get; set; }
-
+        public object message { get; set; }
     }
 }

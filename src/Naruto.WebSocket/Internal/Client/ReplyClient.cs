@@ -18,9 +18,13 @@ namespace Naruto.WebSocket.Internal.Client
             currentContext = _currentContext;
         }
 
-        public async Task SendAsync(string msg)
+        public async Task SendAsync(string execAction, object msg)
         {
-            await currentContext.WebSocketClient.WebSocket.SendMessage(msg);
+            await currentContext.WebSocketClient.WebSocket.SendMessage(new Object.SendMessageModel
+            {
+                message = msg,
+                action = execAction
+            });
         }
     }
 }

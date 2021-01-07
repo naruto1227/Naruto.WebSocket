@@ -16,16 +16,18 @@ namespace Naruto.WebSocket.Interface.Client
         /// <summary>
         /// 给除此连接外的所有用户发送消息
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="execAction">调用的方法</param>
+        /// <param name="msg">消息的信息</param>
         /// <returns></returns>
-        Task SendAsync(string connectionId, string msg);
+        Task SendAsync(string connectionId, string execAction, object msg);
 
         /// <summary>
         /// 给除此连接外的所有用户发送消息
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="execAction">调用的方法</param>
+        /// <param name="msg">消息的信息</param>
         /// <returns></returns>
-        Task SendAsync(List<string> connectionId, string msg);
+        Task SendAsync(List<string> connectionId, string execAction, object msg);
     }
 
     /// <summary>

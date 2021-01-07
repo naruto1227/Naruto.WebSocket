@@ -44,9 +44,9 @@ namespace Naruto.WebSocket.Internal.Client
             logger = _logger;
         }
 
-        public async Task SendAsync(string msg)
+        public async Task SendAsync(string execAction, object msg)
         {
-            await SendMessageAsync(msg);
+            await SendMessageAsync(execAction, msg);
             //发布事件
             await eventBusProxy.PublishAsync(new SubscribeMessage
             {
@@ -54,7 +54,11 @@ namespace Naruto.WebSocket.Internal.Client
                 SendTypeEnum = MessageSendTypeEnum.All,
                 ParamterEntity = new ParamterEntity
                 {
-                    Message = msg
+                    Message = new SendMessageModel
+                    {
+                        action = execAction,
+                        message = msg
+                    }
                 }
             });
         }
@@ -62,15 +66,20 @@ namespace Naruto.WebSocket.Internal.Client
         /// <summary>
         /// 发送消息
         /// </summary>
+        /// <param name="execAction">调用的方法</param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        public async Task SendMessageAsync(string msg)
+        public async Task SendMessageAsync(string execAction, object msg)
         {
             //获取所有在线的用户
             var webSockets = await socketClientStorage.GetAllAsync();
             Parallel.ForEach(webSockets, async item =>
             {
-                await item.SendMessage(msg);
+                await item.SendMessage(new SendMessageModel
+                {
+                    action = execAction,
+                    message = msg
+                });
             });
         }
     }

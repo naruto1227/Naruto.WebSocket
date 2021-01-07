@@ -63,19 +63,21 @@ namespace Naruto.WebSocket.Redis
                         {
                             return;
                         }
+                        //获取消息信息
+                        var sendMessageModel = subscribeMessage.ParamterEntity.Message;
                         switch (subscribeMessage.SendTypeEnum)
                         {
                             //所有用户
                             case MessageSendTypeEnum.All:
                                 //获取客户端
                                 var allClient = serviceProvider.GetRequiredService(typeof(IClusterAllClient<>).MakeGenericType(TenantPathCache.GetByKey(subscribeMessage.TenantIdentity))) as IClusterAllClient;
-                                await allClient.SendMessageAsync(subscribeMessage.ParamterEntity.Message);
+                                await allClient.SendMessageAsync(sendMessageModel.action, sendMessageModel.message);
                                 break;
                             //群组用户
                             case MessageSendTypeEnum.Group:
                                 //获取客户端
                                 var groupClient = serviceProvider.GetRequiredService(typeof(IClusterGroupClient<>).MakeGenericType(TenantPathCache.GetByKey(subscribeMessage.TenantIdentity))) as IClusterGroupClient;
-                                await groupClient.SendMessageAsync(subscribeMessage.ParamterEntity.GroupId, subscribeMessage.ParamterEntity.Message);
+                                await groupClient.SendMessageAsync(subscribeMessage.ParamterEntity.GroupId, sendMessageModel.action, sendMessageModel.message);
                                 break;
 
                             case MessageSendTypeEnum.Current:
@@ -83,11 +85,11 @@ namespace Naruto.WebSocket.Redis
                                 var currentClient = serviceProvider.GetRequiredService(typeof(IClusterCurrentClient<>).MakeGenericType(TenantPathCache.GetByKey(subscribeMessage.TenantIdentity))) as IClusterCurrentClient;
                                 if (subscribeMessage.ActionTypeEnum == MessageSendActionTypeEnum.Single)
                                 {
-                                    await currentClient.SendMessageAsync(subscribeMessage.ParamterEntity.ConnectionId, subscribeMessage.ParamterEntity.Message);
+                                    await currentClient.SendMessageAsync(subscribeMessage.ParamterEntity.ConnectionId, sendMessageModel.action, sendMessageModel.message);
                                 }
                                 if (subscribeMessage.ActionTypeEnum == MessageSendActionTypeEnum.Many)
                                 {
-                                    await currentClient.SendMessageAsync(subscribeMessage.ParamterEntity.ConnectionIds, subscribeMessage.ParamterEntity.Message);
+                                    await currentClient.SendMessageAsync(subscribeMessage.ParamterEntity.ConnectionIds, sendMessageModel.action, sendMessageModel.message);
                                 }
 
                                 break;
@@ -96,11 +98,11 @@ namespace Naruto.WebSocket.Redis
                                 var otherClient = serviceProvider.GetRequiredService(typeof(IClusterOtherClient<>).MakeGenericType(TenantPathCache.GetByKey(subscribeMessage.TenantIdentity))) as IClusterOtherClient;
                                 if (subscribeMessage.ActionTypeEnum == MessageSendActionTypeEnum.Single)
                                 {
-                                    await otherClient.SendMessageAsync(subscribeMessage.ParamterEntity.ConnectionId, subscribeMessage.ParamterEntity.Message);
+                                    await otherClient.SendMessageAsync(subscribeMessage.ParamterEntity.ConnectionId, sendMessageModel.action, sendMessageModel.message);
                                 }
                                 if (subscribeMessage.ActionTypeEnum == MessageSendActionTypeEnum.Many)
                                 {
-                                    await otherClient.SendMessageAsync(subscribeMessage.ParamterEntity.ConnectionIds, subscribeMessage.ParamterEntity.Message);
+                                    await otherClient.SendMessageAsync(subscribeMessage.ParamterEntity.ConnectionIds, sendMessageModel.action, sendMessageModel.message);
                                 }
                                 break;
                         }

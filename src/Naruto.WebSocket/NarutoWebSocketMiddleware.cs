@@ -117,7 +117,7 @@ namespace Naruto.WebSocket
                 //触发上线通知
                 NarutoWebSocketEvent.OnLineEvent?.Invoke(webSocketClient);
                 //调用开启连接的方法
-                await messageRevice.HandlerAsync(webSocketClient, new ReciveMessageBase { action = NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString() }.ToJson()).ConfigureAwait(false);
+                await messageRevice.HandlerAsync(webSocketClient, new MessageBase { action = NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString() }.ToJson()).ConfigureAwait(false);
 
                 //接收消息 判断是否开启连接
                 while (webSocketClient.WebSocket.State == System.Net.WebSockets.WebSocketState.Open)
@@ -144,7 +144,7 @@ namespace Naruto.WebSocket
             finally
             {
                 //处理断开事件的事件
-                await messageRevice.HandlerAsync(webSocketClient, new ReciveMessageBase { action = NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString() }.ToJson()).ConfigureAwait(false);
+                await messageRevice.HandlerAsync(webSocketClient, new MessageBase { action = NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString() }.ToJson()).ConfigureAwait(false);
                 //移除客户端缓存
                 await clientStorage.RemoveAsync(key);
                 //下线的通知
