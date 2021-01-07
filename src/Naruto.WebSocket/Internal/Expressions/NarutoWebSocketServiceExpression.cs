@@ -59,21 +59,19 @@ namespace Naruto.WebSocket.Internal.Expressions
             var methodParameter = Expression.Parameter(parameterEntity == null ? typeof(object) : parameterEntity.GetType(), "methodParameter");
 
             //动态执行方法
-            var method = MethodCache.Get(service.GetType(), action);
-            //获取参数
-            var parameters = method.GetParameters();
+            var methodCacheInfo = MethodCache.Get(service.GetType(), action);
             //调用指定的方法
             MethodCallExpression actionCall = null;
             //验证是否方法是否 有参数
-            if (parameters.Count() == 0)
+            if (methodCacheInfo.ParameterInfos.Count() == 0)
             {
                 //执行无参方法
-                actionCall = Expression.Call(p1, method);
+                actionCall = Expression.Call(p1, methodCacheInfo.Method);
             }
             else
             {
                 //执行有参的方法
-                actionCall = Expression.Call(p1, method, methodParameter);
+                actionCall = Expression.Call(p1, methodCacheInfo.Method, methodParameter);
             }
             //生成lambda
             var lambda = Expression.Lambda(actionCall, new ParameterExpression[] { p1, methodParameter });

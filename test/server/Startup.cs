@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Naruto.WebSocket;
 using Naruto.WebSocket.Extensions;
+using Naruto.WebSocket.Interface;
 //using Naruto.WebSocket.Redis;
 
 namespace server
@@ -29,7 +30,7 @@ namespace server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env, IClientSend<MyService> clientSend)
         {
             if (env.IsDevelopment())
             {
@@ -37,7 +38,7 @@ namespace server
             }
 
             app.UseNarutoWebSocket();
-            
+
             NarutoWebSocketEvent.RegisterOnLine(a =>
             {
                 Console.WriteLine($"{a.ConnectionId}:…œœﬂ");

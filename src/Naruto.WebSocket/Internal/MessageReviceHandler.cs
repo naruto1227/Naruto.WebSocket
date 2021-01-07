@@ -25,7 +25,7 @@ namespace Naruto.WebSocket.Internal
         private readonly IWebSocketOptionFactory webSocketOptionFactory;
 
 
-        public MessageReviceHandler( IWebSocketOptionFactory _webSocketOptionFactory)
+        public MessageReviceHandler(IWebSocketOptionFactory _webSocketOptionFactory)
         {
             webSocketOptionFactory = _webSocketOptionFactory;
         }
@@ -40,7 +40,10 @@ namespace Naruto.WebSocket.Internal
         {
             //获取基类消息
             var reciveMessageBase = msg.ToDeserialize<ReciveMessageBase>();
-
+            if (reciveMessageBase == null || string.IsNullOrWhiteSpace(reciveMessageBase.action))
+            {
+                throw new ArgumentNullException($"{msg}：传递的消息不符合约束");
+            }
             //获取配置
             var webSocketOption = await webSocketOptionFactory.GetAsync(webSocketClient.Context.Request.Path);
             if (webSocketOption == null)
@@ -83,9 +86,9 @@ namespace Naruto.WebSocket.Internal
         private async Task EexecReciveMessage(object service, WebSocketOption webSocketOption, ReciveMessageBase reciveMessageBase, string msg)
         {
             //获取方法
-            var method = MethodCache.Get(webSocketOption.ServiceType, reciveMessageBase.action);
+            var methodCacheInfo = MethodCache.Get(webSocketOption.ServiceType, reciveMessageBase.action);
             //获取方法的参数
-            var parameters = method.GetParameters();
+            var parameters = methodCacheInfo.ParameterInfos;
             //执行操作
             await NarutoWebSocketServiceExpression.ExecAsync(service, reciveMessageBase.action, parameters.Count() > 0 ? msg.ToDeserialize(parameters[0].ParameterType) : null).ConfigureAwait(false);
         }

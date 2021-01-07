@@ -22,7 +22,7 @@ namespace server
                 {
                     webBuilder.ConfigureKestrel(item =>
                     {
-                        item.ListenAnyIP(new Random().Next(5001, 6000));
+                        item.ListenAnyIP(5000);
                     });
                     webBuilder.UseStartup<Startup>();
                 });

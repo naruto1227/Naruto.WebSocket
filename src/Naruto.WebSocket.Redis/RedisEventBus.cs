@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Naruto.Redis;
-using Naruto.Redis.IRedisManage;
+using Naruto.Redis.Interface;
 using Naruto.WebSocket.Extensions;
 using Naruto.WebSocket.Interface;
 using Naruto.WebSocket.Interface.Client;

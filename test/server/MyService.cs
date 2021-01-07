@@ -42,6 +42,7 @@ namespace server
         }
         public async Task sendAll(SendMsg sendMsg)
         {
+            await Reply.SendAsync("回复");
             // logger.LogInformation($"{ConnectionId}:发送所有人消息");
             await Client.All.SendAsync(sendMsg.msg);
         }

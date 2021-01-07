@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Naruto.Redis.RedisConfig;
+using Naruto.Redis.Config;
 using Naruto.WebSocket.Interface;
 using System;
 using System.Collections.Generic;

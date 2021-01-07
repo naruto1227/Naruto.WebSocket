@@ -35,7 +35,7 @@ namespace Naruto.WebSocket.Internal
                 return;
             }
             //定义一个数据的缓存key
-            var cacheKey = Guid.NewGuid().ToString();
+            var cacheKey = Environment.MachineName + Guid.NewGuid().ToString();
             //消息消息存储服务
             var messageStorage = serviceProvider.GetRequiredService<ISubscribeMessageStorage>();
             //存储消息

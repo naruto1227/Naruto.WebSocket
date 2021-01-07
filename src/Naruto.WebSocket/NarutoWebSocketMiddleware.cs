@@ -109,11 +109,9 @@ namespace Naruto.WebSocket
             await clientStorage.AddAsync(key, webSocketClient);
             //获取服务
             var messageRevice = context.RequestServices.GetRequiredService<IMessageReviceHandler>();
-            #region 获取当前上下文实体 配置数据信息
-            var currentContext = context.RequestServices.GetRequiredService(typeof(CurrentContext<>).MakeGenericType(TenantPathCache.GetByKey(context.Request.Path))) as CurrentContext;
-            currentContext.WebSocketClient = webSocketClient;
-            currentContext.Key = key;
-            #endregion
+            // 获取当前上下文实体 配置数据信息
+            BuildCurrentContext(context: context, key: key, webSocketClient: webSocketClient);
+
             try
             {
                 //触发上线通知
@@ -130,7 +128,7 @@ namespace Naruto.WebSocket
                     //验证消息类型 是否为文本
                     if (result.MessageType == System.Net.WebSockets.WebSocketMessageType.Text)
                     {
-                        //转换消息
+                        //转换消息格式
                         var msg = bytes.ToUtf8String();
                         //处理接收消息事件
                         NarutoWebSocketEvent.ReciveEvent?.Invoke(webSocketClient, msg);
@@ -147,11 +145,24 @@ namespace Naruto.WebSocket
             {
                 //处理断开事件的事件
                 await messageRevice.HandlerAsync(webSocketClient, new ReciveMessageBase { action = NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString() }.ToJson()).ConfigureAwait(false);
-                //当连接不是开启的状态就移除
+                //移除客户端缓存
                 await clientStorage.RemoveAsync(key);
                 //下线的通知
                 NarutoWebSocketEvent.OffLineEvent?.Invoke(webSocketClient);
             }
+        }
+
+        /// <summary>
+        ///  构建当前上下文实体 配置数据信息
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="key"></param>
+        /// <param name="webSocketClient"></param>
+        private void BuildCurrentContext(HttpContext context, Guid key, WebSocketClient webSocketClient)
+        {
+            var currentContext = context.RequestServices.GetRequiredService(typeof(CurrentContext<>).MakeGenericType(TenantPathCache.GetByKey(context.Request.Path))) as CurrentContext;
+            currentContext.WebSocketClient = webSocketClient;
+            currentContext.Key = key;
         }
     }
 }
