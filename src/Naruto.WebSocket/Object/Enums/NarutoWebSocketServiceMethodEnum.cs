@@ -18,6 +18,11 @@ namespace Naruto.WebSocket.Object.Enums
         /// <summary>
         /// 连接断开
         /// </summary>
-        OnDisConnectionAsync
+        OnDisConnectionAsync,
+
+        /// <summary>
+        /// 心跳检查
+        /// </summary>
+        HeartbeatCheck
     }
 }

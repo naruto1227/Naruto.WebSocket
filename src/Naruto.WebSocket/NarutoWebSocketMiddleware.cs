@@ -88,7 +88,7 @@ namespace Naruto.WebSocket
                 else
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                    logger.LogInformation("当前不是一个有效的webscoket连接");
+                    logger.LogWarning("当前不是一个有效的webscoket连接");
                 }
             }
             else
@@ -139,7 +139,7 @@ namespace Naruto.WebSocket
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.ToString());
+                logger.LogWarning(ex.ToString());
             }
             finally
             {

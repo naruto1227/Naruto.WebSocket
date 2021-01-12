@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Naruto.WebSocket.Exceptions;
 using Naruto.WebSocket.Extensions;
 using Naruto.WebSocket.Interface;
@@ -24,10 +25,12 @@ namespace Naruto.WebSocket.Internal
 
         private readonly IWebSocketOptionFactory webSocketOptionFactory;
 
+        private readonly ILogger Logger;
 
-        public MessageReviceHandler(IWebSocketOptionFactory _webSocketOptionFactory)
+        public MessageReviceHandler(IWebSocketOptionFactory _webSocketOptionFactory, ILogger<MessageReviceHandler> _Logger)
         {
             webSocketOptionFactory = _webSocketOptionFactory;
+            Logger = _Logger;
         }
         /// <summary>
         /// 处理消息
@@ -42,7 +45,8 @@ namespace Naruto.WebSocket.Internal
             var reciveMessageBase = msg.ToDeserialize<MessageBase>();
             if (reciveMessageBase == null || reciveMessageBase.action.IsNullOrEmpty())
             {
-                throw new ArgumentNullException($"{msg}：传递的消息不符合约束");
+                Logger.LogWarning("{msg}：传递的消息不符合约束", msg);
+                return;
             }
             //获取配置
             var webSocketOption = await webSocketOptionFactory.GetAsync(webSocketClient.Context.Request.Path);
@@ -54,10 +58,18 @@ namespace Naruto.WebSocket.Internal
             //验证消息是否为内部的消息
             if (reciveMessageBase.action.Equals(NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString()) || reciveMessageBase.action.Equals(NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString()))
             {
+                Logger.LogTrace("调用内部方法,action={action},ConnectionId={connectionId}", reciveMessageBase.action, webSocketClient.ConnectionId);
                 await EexecInternalMessage(service, webSocketClient, reciveMessageBase).ConfigureAwait(false);
+            }
+            //验证是否为心跳检查
+            else if (string.Compare(reciveMessageBase.action, NarutoWebSocketServiceMethodEnum.HeartbeatCheck.ToString(), StringComparison.CurrentCultureIgnoreCase) == 0)
+            {
+                //不执行任何的操作
+                Logger.LogTrace("执行心跳检查,ConnectionId={connectionId}", webSocketClient.ConnectionId);
             }
             else
             {
+                Logger.LogTrace("调用外部方法,action={action},ConnectionId={connectionId}", reciveMessageBase.action, webSocketClient.ConnectionId);
                 await EexecReciveMessage(service, webSocketOption, reciveMessageBase, msg).ConfigureAwait(false);
             }
         }
