@@ -45,6 +45,10 @@ namespace Naruto.WebSocket.Extensions
         /// <returns></returns>
         public static T ToDeserialize<T>(this string source)
         {
+            if (source == null)
+            {
+                return default;
+            }
             return JsonConvert.DeserializeObject<T>(source);
         }
 
@@ -55,6 +59,10 @@ namespace Naruto.WebSocket.Extensions
         /// <returns></returns>
         public static object ToDeserialize(this string source, Type type)
         {
+            if (source == null)
+            {
+                return default;
+            }
             return JsonConvert.DeserializeObject(source, type);
         }
         /// <summary>
@@ -64,6 +72,10 @@ namespace Naruto.WebSocket.Extensions
         /// <returns></returns>
         public static string ToJson(this object source)
         {
+            if (source == null)
+            {
+                return default;
+            }
             return JsonConvert.SerializeObject(source);
         }
     }

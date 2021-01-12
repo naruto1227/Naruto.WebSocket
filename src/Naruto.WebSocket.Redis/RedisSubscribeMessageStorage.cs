@@ -1,4 +1,6 @@
-﻿using Naruto.Redis;
+﻿using Microsoft.Extensions.Logging;
+using Naruto.Redis;
+using Naruto.WebSocket.Extensions;
 using Naruto.WebSocket.Interface;
 using Naruto.WebSocket.Object;
 using System;
@@ -23,9 +25,12 @@ namespace Naruto.WebSocket.Redis
         /// </summary>
         private const string KeyPrefix = nameof(RedisSubscribeMessageStorage) + ":";
 
-        public RedisSubscribeMessageStorage(IRedisRepository _redisRepository)
+        private readonly ILogger logger;
+
+        public RedisSubscribeMessageStorage(IRedisRepository _redisRepository, ILogger<RedisSubscribeMessageStorage> _logger)
         {
             redisRepository = _redisRepository;
+            logger = _logger;
         }
         /// <summary>
         /// 获取消息
@@ -56,6 +61,7 @@ namespace Naruto.WebSocket.Redis
             {
                 throw new ArgumentNullException(nameof(subscribeMessage));
             }
+            logger.LogTrace("存储订阅的消息,key={key},subscribeMessage=【{subscribeMessage}】", key, subscribeMessage.ToJson());
             //存储消息，并设置90s有效期
             await redisRepository.String.AddAsync(KeyPrefix + key, subscribeMessage, TimeSpan.FromSeconds(90));
         }

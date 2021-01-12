@@ -9,6 +9,7 @@ using Naruto.WebSocket.Object;
 using Naruto.WebSocket.Internal.Cache;
 using Naruto.WebSocket.Object.Enums;
 using Microsoft.Extensions.Logging;
+using Naruto.WebSocket.Extensions;
 
 namespace Naruto.WebSocket.Internal.Client
 {
@@ -71,6 +72,7 @@ namespace Naruto.WebSocket.Internal.Client
         /// <returns></returns>
         public async Task SendMessageAsync(string execAction, object msg)
         {
+            logger.LogTrace("发送消息给所有的在线用户,execAction={execAction},msg={msg}", execAction, msg.ToJson());
             //获取所有在线的用户
             var webSockets = await socketClientStorage.GetAllAsync();
             Parallel.ForEach(webSockets, async item =>

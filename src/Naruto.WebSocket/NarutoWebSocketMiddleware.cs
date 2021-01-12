@@ -116,6 +116,7 @@ namespace Naruto.WebSocket
             {
                 //触发上线通知
                 NarutoWebSocketEvent.OnLineEvent?.Invoke(webSocketClient);
+                logger.LogTrace("执行上线通知连接方法,{connectionId}", webSocketClient.ConnectionId);
                 //调用开启连接的方法
                 await messageRevice.HandlerAsync(webSocketClient, new MessageBase { action = NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString() }.ToJson()).ConfigureAwait(false);
 
@@ -130,6 +131,7 @@ namespace Naruto.WebSocket
                     {
                         //转换消息格式
                         var msg = bytes.ToUtf8String();
+                        logger.LogTrace("接收消息,{connectionId},{msg}", webSocketClient.ConnectionId, msg);
                         //处理接收消息事件
                         NarutoWebSocketEvent.ReciveEvent?.Invoke(webSocketClient, msg);
                         //处理消息
@@ -143,6 +145,7 @@ namespace Naruto.WebSocket
             }
             finally
             {
+                logger.LogTrace("执行下线通知连接方法,{connectionId}", webSocketClient.ConnectionId);
                 //处理断开事件的事件
                 await messageRevice.HandlerAsync(webSocketClient, new MessageBase { action = NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString() }.ToJson()).ConfigureAwait(false);
                 //移除客户端缓存

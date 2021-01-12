@@ -1,4 +1,6 @@
-﻿using Naruto.WebSocket.Interface;
+﻿using Microsoft.Extensions.Logging;
+using Naruto.WebSocket.Extensions;
+using Naruto.WebSocket.Interface;
 using Naruto.WebSocket.Interface.Client;
 using Naruto.WebSocket.Internal.Cache;
 using Naruto.WebSocket.Object;
@@ -31,11 +33,14 @@ namespace Naruto.WebSocket.Internal.Client
         private readonly IEventBusProxy eventBusProxy;
 
 
-        public OtherClient(IWebSocketClientStorage<TService> _socketClientStorage, IEventBusProxy _eventBusProxy)
+        private readonly ILogger logger;
+
+        public OtherClient(IWebSocketClientStorage<TService> _socketClientStorage, IEventBusProxy _eventBusProxy, ILogger<OtherClient<TService>> _logger)
         {
             socketClientStorage = _socketClientStorage;
             RequestPath = TenantPathCache.GetByType(typeof(TService));
             eventBusProxy = _eventBusProxy;
+            logger = _logger;
         }
 
 
@@ -85,6 +90,7 @@ namespace Naruto.WebSocket.Internal.Client
             var webSockets = await socketClientStorage.ExceptConnectionIdAsync(connectionId);
             if (webSockets != null && webSockets.Count() > 0)
             {
+                logger.LogTrace("给除此连接外的其它连接发送消息,execAction={execAction},connectionId={connectionId},msg={msg}", execAction, connectionId, msg.ToJson());
                 Parallel.ForEach(webSockets, async item => await item.SendMessage(new Object.SendMessageModel
                 {
                     message = msg,
@@ -98,6 +104,7 @@ namespace Naruto.WebSocket.Internal.Client
             var webSockets = await socketClientStorage.ExceptConnectionIdAsync(connectionId);
             if (webSockets != null && webSockets.Count() > 0)
             {
+                logger.LogTrace("给除此连接外的其它连接发送消息,execAction={execAction},connectionId={connectionId},msg={msg}", execAction, connectionId.ToJson(), msg.ToJson());
                 Parallel.ForEach(webSockets, async item => await item.SendMessage(new Object.SendMessageModel
                 {
                     message = msg,

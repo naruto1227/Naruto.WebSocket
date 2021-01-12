@@ -1,4 +1,6 @@
-﻿using Naruto.WebSocket.Interface;
+﻿using Microsoft.Extensions.Logging;
+using Naruto.WebSocket.Extensions;
+using Naruto.WebSocket.Interface;
 using Naruto.WebSocket.Interface.Client;
 using Naruto.WebSocket.Internal.Cache;
 using Naruto.WebSocket.Object;
@@ -29,12 +31,16 @@ namespace Naruto.WebSocket.Internal.Client
         /// 事件总线代理对象
         /// </summary>
         private readonly IEventBusProxy eventBusProxy;
-        public GroupClient(IWebSocketClientStorage<TService> _socketClientStorage, IGroupStorage<TService> _groupStorage, IEventBusProxy _eventBusProxy)
+
+        private readonly ILogger logger;
+
+        public GroupClient(IWebSocketClientStorage<TService> _socketClientStorage, IGroupStorage<TService> _groupStorage, IEventBusProxy _eventBusProxy, ILogger<GroupClient<TService>> _logger)
         {
             socketClientStorage = _socketClientStorage;
             groupStorage = _groupStorage;
             eventBusProxy = _eventBusProxy;
             RequestPath = TenantPathCache.GetByType(typeof(TService));
+            logger = _logger;
         }
 
 
@@ -67,6 +73,7 @@ namespace Naruto.WebSocket.Internal.Client
             {
                 return;
             }
+            logger.LogTrace("给指定群组发送消息,groupId={groupId},execAction={execAction},connections={connections},msg={msg}", groupId, execAction, connections.ToJson(), msg.ToJson());
             //获取所有的socket客户端
             var webSockets = await socketClientStorage.GetByConnectionIdAsync(connections);
             if (webSockets != null && webSockets.Count() > 0)

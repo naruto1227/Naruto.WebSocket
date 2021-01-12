@@ -1,4 +1,6 @@
-﻿using Naruto.WebSocket.Interface;
+﻿using Microsoft.Extensions.Logging;
+using Naruto.WebSocket.Extensions;
+using Naruto.WebSocket.Interface;
 using Naruto.WebSocket.Interface.Client;
 using Naruto.WebSocket.Internal.Cache;
 using Naruto.WebSocket.Object;
@@ -24,11 +26,14 @@ namespace Naruto.WebSocket.Internal.Client
         /// 事件总线代理对象
         /// </summary>
         private readonly IEventBusProxy eventBusProxy;
-        public CurrentClient(IWebSocketClientStorage<TService> _socketClientStorage, IEventBusProxy _eventBusProxy)
+        private readonly ILogger logger;
+
+        public CurrentClient(IWebSocketClientStorage<TService> _socketClientStorage, IEventBusProxy _eventBusProxy, ILogger<CurrentClient<TService>> _logger)
         {
             socketClientStorage = _socketClientStorage;
             RequestPath = TenantPathCache.GetByType(typeof(TService));
             eventBusProxy = _eventBusProxy;
+            logger = _logger;
         }
 
         public async Task SendAsync(string connectionId, string execAction, object msg)
@@ -74,6 +79,7 @@ namespace Naruto.WebSocket.Internal.Client
 
         public async Task SendMessageAsync(string connectionId, string execAction, object msg)
         {
+            logger.LogTrace("给指定用户发送消息,connectionId={connectionId},execAction={execAction},msg={msg}", connectionId, execAction, msg.ToJson());
             var list = await socketClientStorage.GetByConnectionIdAsync(connectionId);
             foreach (var item in list)
             {
@@ -87,6 +93,7 @@ namespace Naruto.WebSocket.Internal.Client
 
         public async Task SendMessageAsync(List<string> connectionIds, string execAction, object msg)
         {
+            logger.LogTrace("给指定用户发送消息,connectionId={connectionId},execAction={execAction},msg={msg}", connectionIds.ToJson(), execAction, msg.ToJson());
             var webSockets = await socketClientStorage.GetByConnectionIdAsync(connectionIds);
             Parallel.ForEach(webSockets, async item =>
             {

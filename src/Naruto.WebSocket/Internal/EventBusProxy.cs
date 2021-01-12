@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Naruto.WebSocket.Internal.Cache;
+using Microsoft.Extensions.Logging;
+using Naruto.WebSocket.Extensions;
 
 namespace Naruto.WebSocket.Internal
 {
@@ -16,9 +18,12 @@ namespace Naruto.WebSocket.Internal
     {
         private readonly IServiceProvider serviceProvider;
 
-        public EventBusProxy(IServiceProvider _serviceProvider)
+        private readonly ILogger logger;
+
+        public EventBusProxy(IServiceProvider _serviceProvider, ILogger<EventBusProxy> _logger)
         {
             serviceProvider = _serviceProvider;
+            logger = _logger;
         }
         /// <summary>
         /// 发布消息
@@ -28,6 +33,7 @@ namespace Naruto.WebSocket.Internal
         /// <returns></returns>
         public async Task PublishAsync(SubscribeMessage message)
         {
+            logger.LogTrace("发送订阅的消息,msg={msg}", message.ToJson());
             //获取总线服务
             var eventBus = serviceProvider.GetService<IEventBus>();
             if (eventBus == null)
