@@ -23,7 +23,7 @@ namespace Naruto.WebSocket
         /// <summary>
         /// 接收消息事件
         /// </summary>
-        internal static Action<WebSocketClient, string> ReciveEvent;
+        internal static Action<WebSocketClient, WebSocketMessageModel> ReciveEvent;
 
         /// <summary>
         /// 注册上线通知的事件
@@ -45,7 +45,7 @@ namespace Naruto.WebSocket
         /// 注册接收消息的事件
         /// </summary>
         /// <param name="action"></param>
-        public static void RegisterRecive(Action<WebSocketClient, string> action)
+        public static void RegisterRecive(Action<WebSocketClient, WebSocketMessageModel> action)
         {
             ReciveEvent += action;
         }

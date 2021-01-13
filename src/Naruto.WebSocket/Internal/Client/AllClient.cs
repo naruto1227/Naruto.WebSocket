@@ -55,7 +55,7 @@ namespace Naruto.WebSocket.Internal.Client
                 SendTypeEnum = MessageSendTypeEnum.All,
                 ParamterEntity = new ParamterEntity
                 {
-                    Message = new SendMessageModel
+                    Message = new WebSocketMessageModel
                     {
                         action = execAction,
                         message = msg
@@ -77,7 +77,7 @@ namespace Naruto.WebSocket.Internal.Client
             var webSockets = await socketClientStorage.GetAllAsync();
             Parallel.ForEach(webSockets, async item =>
             {
-                await item.SendMessage(new SendMessageModel
+                await item.SendMessage(new WebSocketMessageModel
                 {
                     action = execAction,
                     message = msg

@@ -54,7 +54,7 @@ namespace Naruto.WebSocket.Internal.Client
                 SendTypeEnum = MessageSendTypeEnum.Other,
                 ParamterEntity = new ParamterEntity
                 {
-                    Message = new SendMessageModel
+                    Message = new WebSocketMessageModel
                     {
                         action = execAction,
                         message = msg
@@ -74,7 +74,7 @@ namespace Naruto.WebSocket.Internal.Client
                 SendTypeEnum = MessageSendTypeEnum.Current,
                 ParamterEntity = new ParamterEntity
                 {
-                    Message = new SendMessageModel
+                    Message = new WebSocketMessageModel
                     {
                         action = execAction,
                         message = msg
@@ -91,7 +91,7 @@ namespace Naruto.WebSocket.Internal.Client
             if (webSockets != null && webSockets.Count() > 0)
             {
                 logger.LogTrace("给除此连接外的其它连接发送消息,execAction={execAction},connectionId={connectionId},msg={msg}", execAction, connectionId, msg.ToJson());
-                Parallel.ForEach(webSockets, async item => await item.SendMessage(new Object.SendMessageModel
+                Parallel.ForEach(webSockets, async item => await item.SendMessage(new Object.WebSocketMessageModel
                 {
                     message = msg,
                     action = execAction
@@ -105,7 +105,7 @@ namespace Naruto.WebSocket.Internal.Client
             if (webSockets != null && webSockets.Count() > 0)
             {
                 logger.LogTrace("给除此连接外的其它连接发送消息,execAction={execAction},connectionId={connectionId},msg={msg}", execAction, connectionId.ToJson(), msg.ToJson());
-                Parallel.ForEach(webSockets, async item => await item.SendMessage(new Object.SendMessageModel
+                Parallel.ForEach(webSockets, async item => await item.SendMessage(new Object.WebSocketMessageModel
                 {
                     message = msg,
                     action = execAction

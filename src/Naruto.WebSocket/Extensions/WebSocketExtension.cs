@@ -22,7 +22,7 @@ namespace Naruto.WebSocket
         /// <param name="message">消息内容</param>
         /// <param name="webSocketMessageType">消息类型 默认为文本</param>
         /// <param name="webSocket"></param>
-        internal static async Task SendMessage(this System.Net.WebSockets.WebSocket webSocket, SendMessageModel sendMessageModel, WebSocketMessageType webSocketMessageType = WebSocketMessageType.Text)
+        internal static async Task SendMessage(this System.Net.WebSockets.WebSocket webSocket, WebSocketMessageModel sendMessageModel, WebSocketMessageType webSocketMessageType = WebSocketMessageType.Text)
         {
             if (sendMessageModel.IsNull())
                 return;

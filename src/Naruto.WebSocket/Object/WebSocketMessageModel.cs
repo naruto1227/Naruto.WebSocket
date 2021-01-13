@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using MessagePack;
 using System.Text;
 
 namespace Naruto.WebSocket.Object
 {
+    
     /// <summary>
-    /// 发送消息的实体模型
+    /// 消息的实体模型
     /// </summary>
-    public class SendMessageModel : MessageBase
+    public class WebSocketMessageModel : MessageBase
     {
+        [Key(1)]
         /// <summary>
         /// 消息的具体内容
         /// </summary>

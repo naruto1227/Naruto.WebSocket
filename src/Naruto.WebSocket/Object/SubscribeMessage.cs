@@ -48,7 +48,7 @@ namespace Naruto.WebSocket.Object
         /// <summary>
         /// 消息内容
         /// </summary>
-        public SendMessageModel Message { get; set; }
+        public WebSocketMessageModel Message { get; set; }
         /// <summary>
         ///连接Id
         /// </summary>
