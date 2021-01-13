@@ -13,7 +13,7 @@ namespace Naruto.WebSocket.Internal.Storage
     /// 2020-04-04
     /// 使用内存存储群组信息
     /// </summary>
-    public class InMemoryGroupStorage<TService> : IGroupStorage<TService> where TService : NarutoWebSocketService
+    public sealed class InMemoryGroupStorage<TService> : IGroupStorage<TService> where TService : NarutoWebSocketService
     {
         /// <summary>
         /// 存储群组和连接的数据

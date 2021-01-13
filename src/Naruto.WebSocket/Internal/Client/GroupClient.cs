@@ -17,7 +17,7 @@ namespace Naruto.WebSocket.Internal.Client
     /// 群组成员发送消息
     /// </summary>
     /// <typeparam name="TService"></typeparam>
-    public class GroupClient<TService> : IGroupClient<TService>, IClusterGroupClient<TService> where TService : NarutoWebSocketService
+    public sealed class GroupClient<TService> : IGroupClient<TService>, IClusterGroupClient<TService> where TService : NarutoWebSocketService
     {
         private readonly IWebSocketClientStorage socketClientStorage;
 

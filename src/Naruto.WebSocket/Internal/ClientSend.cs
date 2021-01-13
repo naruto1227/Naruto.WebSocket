@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Naruto.WebSocket.Internal
 {
-    public class ClientSend<TService> : IClientSend<TService> where TService : NarutoWebSocketService
+    public sealed class ClientSend<TService> : IClientSend<TService> where TService : NarutoWebSocketService
     {
 
         private readonly IServiceProvider serviceProvider;

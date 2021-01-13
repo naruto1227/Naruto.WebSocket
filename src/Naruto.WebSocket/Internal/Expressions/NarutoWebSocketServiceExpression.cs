@@ -32,15 +32,17 @@ namespace Naruto.WebSocket.Internal.Expressions
         /// <param name="service">继承NarutoWebSocketService的服务</param>
         /// <param name="action">执行的方法</param>
         /// <param name="parameterEntity">方法的参数</param>
+        /// <param name="parameterType">参数类型</param>
+        /// <param name="isParamter">是否含有参数</param>
         /// <returns></returns>
-        public static Task ExecAsync(object service, string action, object parameterEntity)
+        public static Task ExecAsync(object service, string action, bool isParamter, object parameterEntity, Type parameterType)
         {
             //从缓存中取
             if (exec.TryGetValue(service.GetType().Name + action, out var res))
             {
                 return res.DynamicInvoke(service, parameterEntity) as Task;
             }
-            return Create(service, action, parameterEntity);
+            return Create(service, action, isParamter, parameterEntity, parameterType);
         }
 
 
@@ -50,13 +52,15 @@ namespace Naruto.WebSocket.Internal.Expressions
         /// <param name="service">继承NarutoWebSocketService的服务</param>
         /// <param name="action">执行的方法</param>
         /// <param name="parameterEntity">方法的参数</param>
+        /// <param name="parameterType">参数类型</param>
+        /// <param name="isParamter">是否为有参数的</param>
         /// <returns></returns>
-        private static Task Create(object service, string action, object parameterEntity)
+        private static Task Create(object service, string action, bool isParamter, object parameterEntity, Type parameterType)
         {
             //定义输入参数
             var p1 = Expression.Parameter(service.GetType(), "service");
             //方法的参数对象
-            var methodParameter = Expression.Parameter(parameterEntity == null ? typeof(object) : parameterEntity.GetType(), "methodParameter");
+            var methodParameter = Expression.Parameter(isParamter ? parameterType : typeof(object), "methodParameter");
 
             //动态执行方法
             var methodCacheInfo = MethodCache.Get(service.GetType(), action);

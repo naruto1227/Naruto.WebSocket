@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Naruto.WebSocket.Internal
 {
-    public class MessageReviceHandler : IMessageReviceHandler
+    public sealed class MessageReviceHandler : IMessageReviceHandler
     {
         /// <summary>
         /// 配置信息工厂
@@ -36,10 +36,11 @@ namespace Naruto.WebSocket.Internal
         /// 处理消息
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="currentServiceType">当前上下文的类型</param>
         /// <param name="webSocketClient"></param>
         /// <param name="messageModel"></param>
         /// <returns></returns>
-        public async Task HandlerAsync(WebSocketClient webSocketClient, WebSocketMessageModel messageModel)
+        public async Task HandlerAsync(WebSocketClient webSocketClient, Type currentServiceType, WebSocketMessageModel messageModel)
         {
             //获取基类消息
             if (messageModel == null || messageModel.action.IsNullOrEmpty())
@@ -47,12 +48,8 @@ namespace Naruto.WebSocket.Internal
                 Logger.LogWarning("{msg}：传递的消息不符合约束", messageModel);
                 return;
             }
-            //获取配置
-            var webSocketOption = await webSocketOptionFactory.GetAsync(webSocketClient.Context.Request.Path);
-            if (webSocketOption == null)
-                throw new NotFoundOptionsException($"{webSocketClient.Context.Request.Path}：找不到对应的ws配置");
             //获取当前租户的服务对象信息
-            var service = webSocketClient.Context.RequestServices.GetRequiredService(webSocketOption.ServiceType);
+            var service = webSocketClient.Context.RequestServices.GetRequiredService(currentServiceType);
 
             //验证消息是否为内部的消息
             if (messageModel.action.Equals(NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString()) || messageModel.action.Equals(NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString()))
@@ -69,7 +66,7 @@ namespace Naruto.WebSocket.Internal
             else
             {
                 Logger.LogTrace("调用外部方法,action={action},ConnectionId={connectionId}", messageModel.action, webSocketClient.ConnectionId);
-                await EexecReciveMessage(service, webSocketOption, messageModel).ConfigureAwait(false);
+                await EexecReciveMessage(service, currentServiceType, messageModel).ConfigureAwait(false);
             }
         }
 
@@ -83,24 +80,29 @@ namespace Naruto.WebSocket.Internal
         private async Task EexecInternalMessage(object service, WebSocketClient webSocketClient, MessageBase reciveMessageBase)
         {
             //执行操作
-            await NarutoWebSocketServiceExpression.ExecAsync(service, reciveMessageBase.action, webSocketClient).ConfigureAwait(false);
+            await NarutoWebSocketServiceExpression.ExecAsync(service, reciveMessageBase.action, isParamter: true, parameterEntity: webSocketClient, webSocketClient.GetType()).ConfigureAwait(false);
         }
 
         /// <summary>
         /// 执行接收的外部消息
         /// </summary>
         /// <param name="service"></param>
-        /// <param name="webSocketOption"></param>
+        /// <param name="currentServiceType">当前上下文的类型</param>
         /// <param name="messageModel">消息模型</param>
         /// <returns></returns>
-        private async Task EexecReciveMessage(object service, WebSocketOption webSocketOption, WebSocketMessageModel messageModel)
+        private async Task EexecReciveMessage(object service, Type currentServiceType, WebSocketMessageModel messageModel)
         {
             //获取方法
-            var methodCacheInfo = MethodCache.Get(webSocketOption.ServiceType, messageModel.action);
+            var methodCacheInfo = MethodCache.Get(currentServiceType, messageModel.action);
             //获取方法的参数
             var parameters = methodCacheInfo.ParameterInfos;
+            
+            //是否含有参数
+            var isParamater = parameters.Count() > 0;
+            //参数信息
+            var parameterEntity = parameters.Count() > 0 ? messageModel.message?.ToString().ToDeserialize(parameters[0].ParameterType) : null;
             //执行操作
-            await NarutoWebSocketServiceExpression.ExecAsync(service, messageModel.action, parameters.Count() > 0 ? messageModel.message.ToString().ToDeserialize(parameters[0].ParameterType) : null).ConfigureAwait(false);
+            await NarutoWebSocketServiceExpression.ExecAsync(service, messageModel.action, isParamter: isParamater, parameterEntity: parameterEntity, parameterType: isParamater ? parameters[0].ParameterType : default).ConfigureAwait(false);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Naruto.WebSocket.Internal.Storage
     /// <summary>
     /// 存放websocket客户端集合
     /// </summary>
-    public class InMemoryWebSocketClientStorage<TService> : IWebSocketClientStorage<TService> where TService : NarutoWebSocketService
+    public sealed class InMemoryWebSocketClientStorage<TService> : IWebSocketClientStorage<TService> where TService : NarutoWebSocketService
     {
         private static readonly ConcurrentDictionary<Guid, WebSocketClient> webSocketClients = new ConcurrentDictionary<Guid, WebSocketClient>();
 

@@ -15,8 +15,9 @@ namespace Naruto.WebSocket.Interface
         /// <summary>
         /// 处理接收到的消息
         /// </summary>
-        /// <param name="messageModel"></param>
+        /// <param name="currentServiceType">当前服务类型</param>
+        /// <param name="messageModel">消息模型</param>
         /// <returns></returns>
-        Task HandlerAsync(WebSocketClient webSocketClient, WebSocketMessageModel messageModel);
+        Task HandlerAsync(WebSocketClient webSocketClient, Type currentServiceType, WebSocketMessageModel messageModel);
     }
 }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Naruto.WebSocket.Internal.Client
 {
-    public class CurrentClient<TService> : ICurrentClient<TService>, IClusterCurrentClient<TService> where TService : NarutoWebSocketService
+    public sealed class CurrentClient<TService> : ICurrentClient<TService>, IClusterCurrentClient<TService> where TService : NarutoWebSocketService
     {
         /// <summary>
         /// webscoket 客户端存储

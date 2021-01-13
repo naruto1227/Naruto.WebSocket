@@ -1,7 +1,6 @@
-
-
 <div style="margin-bottom:5px;">
-    群号: <input type="text" id="txtRoomId" value="666666" /> <button id="btnJoin" onclick="join()">入群</button> <button id="btnLeave" onclick="leave()">退群</button>
+    群号: <input type="text" id="txtRoomId" value="666666" /> <button id="btnJoin" onclick="join()">入群</button> <button
+        id="btnLeave" onclick="leave()">退群</button>
 </div>
 <div style="height:300px;width:600px">
     <textarea style="height:100%;width:100%" id="msgList"></textarea>
@@ -39,19 +38,25 @@
         };
         webSocket.send(JSON.stringify(msg));
     }
+
     function send() {
-            var msg = { 
+        var msg = {
             action: "send",
-            msg: document.getElementById("msg").value,
-            roomId: document.getElementById("txtRoomId").value
+            message: {
+                msg: document.getElementById("msg").value,
+                roomId: document.getElementById("txtRoomId").value
+            }
         };
         webSocket.send(JSON.stringify(msg));
     }
 
     function sendAll() {
-            var msg = { 
+        var msg = {
             action: "sendAll",
-            msg: document.getElementById("msg").value
+            message: {
+                msg: document.getElementById("msg").value,
+                roomId: document.getElementById("txtRoomId").value
+            }
         };
         webSocket.send(JSON.stringify(msg));
     }

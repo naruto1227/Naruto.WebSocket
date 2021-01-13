@@ -11,7 +11,7 @@ namespace Naruto.WebSocket.Internal.Client
     /// <summary>
     /// 回复消息
     /// </summary>
-    public class ReplyClient<TService> : IReplyClient<TService> where TService : NarutoWebSocketService
+    public sealed class ReplyClient<TService> : IReplyClient<TService> where TService : NarutoWebSocketService
     {
         private readonly CurrentContext currentContext;
 

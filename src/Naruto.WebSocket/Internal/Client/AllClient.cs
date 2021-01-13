@@ -19,7 +19,7 @@ namespace Naruto.WebSocket.Internal.Client
     /// 单机版给所有人发消息
     /// </summary>
     /// <typeparam name="TService"></typeparam>
-    public class AllClient<TService> : IAllClient<TService>, IClusterAllClient<TService> where TService : NarutoWebSocketService
+    public sealed class AllClient<TService> : IAllClient<TService>, IClusterAllClient<TService> where TService : NarutoWebSocketService
     {
         /// <summary>
         /// webscoket 客户端存储

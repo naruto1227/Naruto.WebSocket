@@ -57,7 +57,6 @@ namespace Naruto.WebSocket
 
         public async Task InvokeAsync(HttpContext context)
         {
-            //根据请求地址获取租户信息
             //验证请求地址
             if (TenantPathCache.Match(context.Request.Path))
             {
@@ -122,7 +121,7 @@ namespace Naruto.WebSocket
                 NarutoWebSocketEvent.OnLineEvent?.Invoke(webSocketClient);
                 logger.LogTrace("执行上线通知连接方法,{connectionId}", webSocketClient.ConnectionId);
                 //调用开启连接的方法
-                await messageRevice.HandlerAsync(webSocketClient, new WebSocketMessageModel { action = NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString() }).ConfigureAwait(false);
+                await messageRevice.HandlerAsync(webSocketClient, webSocketOption.ServiceType, new WebSocketMessageModel { action = NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString() }).ConfigureAwait(false);
 
                 //接收消息 判断是否开启连接
                 while (webSocketClient.WebSocket.State == WebSocketState.Open)
@@ -142,7 +141,7 @@ namespace Naruto.WebSocket
                     //处理接收消息事件
                     NarutoWebSocketEvent.ReciveEvent?.Invoke(webSocketClient, messageModel);
                     //处理消息
-                    await messageRevice.HandlerAsync(webSocketClient, messageModel).ConfigureAwait(false);
+                    await messageRevice.HandlerAsync(webSocketClient, webSocketOption.ServiceType, messageModel).ConfigureAwait(false);
                 }
             }
             catch (Exception ex)
@@ -153,7 +152,7 @@ namespace Naruto.WebSocket
             {
                 logger.LogTrace("执行下线通知连接方法,{connectionId}", webSocketClient.ConnectionId);
                 //处理断开事件的事件
-                await messageRevice.HandlerAsync(webSocketClient, new WebSocketMessageModel { action = NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString() }).ConfigureAwait(false);
+                await messageRevice.HandlerAsync(webSocketClient, webSocketOption.ServiceType, new WebSocketMessageModel { action = NarutoWebSocketServiceMethodEnum.OnDisConnectionAsync.ToString() }).ConfigureAwait(false);
                 //移除客户端缓存
                 await clientStorage.RemoveAsync(key);
                 //下线的通知
@@ -181,7 +180,7 @@ namespace Naruto.WebSocket
                 logger.LogTrace("接收文本消息,{connectionId},{msg}", connectionId, msg);
             }
             //验证是否为二进制数据
-            else if (webSocketMessageType == System.Net.WebSockets.WebSocketMessageType.Binary)
+            else if (webSocketMessageType == WebSocketMessageType.Binary)
             {
                 var res = MessagePack.MessagePackSerializer.Deserialize<MessageBase>(bytes);
             }

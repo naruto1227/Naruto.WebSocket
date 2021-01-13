@@ -17,7 +17,7 @@ namespace Naruto.WebSocket.Internal.Client
     /// 发送给指定连接外的其它用户
     /// </summary>
     /// <typeparam name="TService"></typeparam>
-    public class OtherClient<TService> : IOtherClient<TService>, IClusterOtherClient<TService> where TService : NarutoWebSocketService
+    public sealed class OtherClient<TService> : IOtherClient<TService>, IClusterOtherClient<TService> where TService : NarutoWebSocketService
     {
         /// <summary>
         /// webscoket 客户端存储
