@@ -27,9 +27,9 @@ namespace Naruto.WebSocket
     {
 
         /// <summary>
-        /// 接收的消息的大小 默认4K
+        /// 接收的消息的大小 
         /// </summary>
-        private const long ReciveBuffSize = 1024 * 4;
+        private long ReciveBuffSize;
 
 
         private readonly RequestDelegate next;
@@ -64,6 +64,8 @@ namespace Naruto.WebSocket
                 {
                     //获取当前租户的配置信息
                     var webSocketOption = await socketOptionFactory.GetAsync(context.Request.Path);
+                    //获取buff接收大小
+                    ReciveBuffSize = webSocketOption.MaximumReceiveMessageSize;
                     //授权验证
                     foreach (var item in webSocketOption.AuthorizationFilters)
                     {

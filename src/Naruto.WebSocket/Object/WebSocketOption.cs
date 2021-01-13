@@ -25,5 +25,10 @@ namespace Naruto.WebSocket.Object
         /// 服务类型
         /// </summary>
         internal Type ServiceType { get; set; }
+
+        /// <summary>
+        /// 消息内容的最大接收大小 默认4kb
+        /// </summary>
+        public long MaximumReceiveMessageSize { get; set; } = 1024 * 4;
     }
 }

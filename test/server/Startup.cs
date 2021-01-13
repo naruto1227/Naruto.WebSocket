@@ -25,6 +25,8 @@ namespace server
             services.AddNarutoWebSocket<MyService>(a =>
             {
                 a.Path = new PathString("/ws");
+
+                a.MaximumReceiveMessageSize = 1024 * 12;
                 a.AuthorizationFilters.Add(new MyAuthorizationFilters());
             });
             //services.AddNarutoWebSocketRedis(a => a.Connection = new string[] { "127.0.0.1:6379" });
