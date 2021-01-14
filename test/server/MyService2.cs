@@ -39,6 +39,7 @@ namespace server
         public async Task send(SendMsg sendMsg)
         {
             await Group.AddAsync("11", "2");
+            await Reply.SendAsync("test", new { msg = "asdasd", ss="123123" });
             await Task.Delay(2);
         }
 

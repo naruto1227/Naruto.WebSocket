@@ -182,7 +182,12 @@ namespace Naruto.WebSocket
             //验证是否为二进制数据
             else if (webSocketMessageType == WebSocketMessageType.Binary)
             {
-                var res = MessagePack.MessagePackSerializer.Deserialize<MessageBase>(bytes);
+                //var res = MessagePack.MessagePackSerializer.ConvertToJson(bytes);
+                //if (!res.IsNullOrEmpty())
+                //{
+                //    sendMessageModel = res.ToDeserialize<WebSocketMessageModel>();
+                //}
+                throw new NotSupportedException("暂未实现二进制数据接收");
             }
             return sendMessageModel;
         }

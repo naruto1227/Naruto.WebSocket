@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using MessagePack;
 
 namespace Naruto.WebSocket.Object
 {
-    [MessagePack.MessagePackObject]
     /// <summary>
     /// 张海波
     /// 2020-04-01
@@ -13,7 +11,6 @@ namespace Naruto.WebSocket.Object
     /// </summary>
     public class MessageBase
     {
-        [Key(0)]
         /// <summary>
         /// 调用的方法
         /// </summary>

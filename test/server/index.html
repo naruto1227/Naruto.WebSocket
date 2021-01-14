@@ -26,7 +26,10 @@
     function join() {
         var msg = {
             action: "join",
-            roomId: document.getElementById("txtRoomId").value
+            message: {
+                msg: document.getElementById("msg").value,
+                roomId: document.getElementById("txtRoomId").value
+            }
         };
         webSocket.send(JSON.stringify(msg));
     }
@@ -34,7 +37,10 @@
     function leave() {
         var msg = {
             action: "leave",
-            roomId: document.getElementById("txtRoomId").value
+            message: {
+                msg: document.getElementById("msg").value,
+                roomId: document.getElementById("txtRoomId").value
+            }
         };
         webSocket.send(JSON.stringify(msg));
     }
