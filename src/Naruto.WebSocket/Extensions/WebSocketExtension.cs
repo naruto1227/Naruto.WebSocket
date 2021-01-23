@@ -24,10 +24,13 @@ namespace Naruto.WebSocket
         /// <param name="webSocket"></param>
         internal static async Task SendMessage(this System.Net.WebSockets.WebSocket webSocket, WebSocketMessageModel sendMessageModel, WebSocketMessageType webSocketMessageType = WebSocketMessageType.Text)
         {
+            //验证连接是否正常
+            if (webSocket.State != WebSocketState.Open)
+                return;
             if (sendMessageModel.IsNull())
                 return;
             //发送
-            await webSocket.SendAsync(Encoding.UTF8.GetBytes(sendMessageModel.ToJson()), webSocketMessageType, true, CancellationToken.None);
+            await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(sendMessageModel.ToJson())), webSocketMessageType, true, CancellationToken.None);
         }
     }
 }
