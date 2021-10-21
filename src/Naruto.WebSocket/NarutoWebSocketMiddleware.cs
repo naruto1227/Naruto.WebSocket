@@ -114,11 +114,17 @@ namespace Naruto.WebSocket
             var messageRevice = context.RequestServices.GetRequiredService<IMessageReviceHandler>();
             // 获取当前上下文实体 配置数据信息
             BuildCurrentContext(context: context, key: key, webSocketClient: webSocketClient);
-
+            //获取拦截器
+            var wesocketIntercept = context.RequestServices.GetService<IWesocketIntercept>();
             try
             {
+
                 //触发上线通知
-                NarutoWebSocketEvent.OnLineEvent?.Invoke(webSocketClient);
+                if (wesocketIntercept != null)
+                {
+                    await wesocketIntercept.OnLineAsync(webSocketClient);
+                }
+
                 logger.LogTrace("执行上线通知连接方法,{connectionId}", webSocketClient.ConnectionId);
                 //调用开启连接的方法
                 await messageRevice.HandlerAsync(webSocketClient, webSocketOption.ServiceType, new WebSocketMessageModel { action = NarutoWebSocketServiceMethodEnum.OnConnectionBeginAsync.ToString() }).ConfigureAwait(false);
@@ -139,7 +145,10 @@ namespace Naruto.WebSocket
                     //构建消息模型
                     var messageModel = BuildMessageModel(result.MessageType, webSocketClient.ConnectionId, contentBytes);
                     //处理接收消息事件
-                    NarutoWebSocketEvent.ReciveEvent?.Invoke(webSocketClient, messageModel);
+                    if (wesocketIntercept != null)
+                    {
+                        await wesocketIntercept.ReciveAsync(webSocketClient, messageModel);
+                    }
                     //处理消息
                     await messageRevice.HandlerAsync(webSocketClient, webSocketOption.ServiceType, messageModel).ConfigureAwait(false);
                 }
@@ -156,7 +165,10 @@ namespace Naruto.WebSocket
                 //移除客户端缓存
                 await clientStorage.RemoveAsync(key);
                 //下线的通知
-                NarutoWebSocketEvent.OffLineEvent?.Invoke(webSocketClient);
+                if (wesocketIntercept != null)
+                {
+                    await wesocketIntercept.OffLineAsync(webSocketClient);
+                }
             }
         }
         /// <summary>
