@@ -42,14 +42,7 @@ namespace server
 
             app.UseNarutoWebSocket();
 
-            NarutoWebSocketEvent.RegisterOnLine(a =>
-            {
-                Console.WriteLine($"{a.ConnectionId}:上线");
-            });
-            NarutoWebSocketEvent.RegisterOffLine(a =>
-            {
-                Console.WriteLine($"{a.ConnectionId}:下线");
-            });
+           
             //NarutoWebSocketEvent.RegisterRecive((client, msg) =>
             //{
             //    Console.WriteLine(msg);
