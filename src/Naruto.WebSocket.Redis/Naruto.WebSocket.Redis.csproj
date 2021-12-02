@@ -1,16 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6</TargetFramework>
     <Description>基于.net core 3.1的一个websocket中间件框架，支持群聊，所有人，指定用户发送连接，支持用户主动传递连接Id
 支持集群部署</Description>
     <Authors>zhanghaibo</Authors>
     <PackageProjectUrl>https://github.com/zhanghaiboshiwo/Naruto.WebSocket</PackageProjectUrl>
     <RepositoryUrl>https://github.com/zhanghaiboshiwo/Naruto.WebSocket</RepositoryUrl>
-    <Version>1.0.8</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Naruto.Redis" Version="1.0.1.4" />
-    <PackageReference Include="Naruto.WebSocket" Version="1.0.8" />
+    <PackageReference Include="Naruto.Redis" Version="2.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Naruto.WebSocket\Naruto.WebSocket.csproj" />
   </ItemGroup>
 </Project>
