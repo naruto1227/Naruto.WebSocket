@@ -38,9 +38,9 @@ namespace Naruto.WebSocket.Redis
             serviceProvider = _serviceProvider;
             messageStorage = _messageStorage;
         }
-        public Task PublishAsync(string key, string data)
+        public async Task PublishAsync(string key, string data)
         {
-            return redisSubscribe.PublishAsync(key, data);
+            await redisSubscribe.PublishAsync(key, data);
         }
         /// <summary>
         /// 订阅消息

@@ -20,13 +20,13 @@ namespace Naruto.WebSocket.Interface
         /// <param name="key"></param>
         /// <param name="webSocketClient"></param>
         /// <returns></returns>
-        Task AddAsync(Guid key, WebSocketClient webSocketClient);
+        ValueTask AddAsync(Guid key, WebSocketClient webSocketClient);
         /// <summary>
         /// 移除
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        Task RemoveAsync(Guid key);
+        ValueTask RemoveAsync(Guid key);
         /// <summary>
         /// 根据主键获取
         /// </summary>
