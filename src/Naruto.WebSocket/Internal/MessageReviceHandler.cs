@@ -45,7 +45,7 @@ namespace Naruto.WebSocket.Internal
             //获取基类消息
             if (messageModel == null || messageModel.action.IsNullOrEmpty())
             {
-                Logger.LogWarning("{msg}：传递的消息不符合约束", messageModel);
+                Logger.LogWarning("action={action}：传递的消息不符合约束", messageModel.action);
                 return;
             }
             //获取当前租户的服务对象信息
@@ -96,7 +96,7 @@ namespace Naruto.WebSocket.Internal
             var methodCacheInfo = MethodCache.Get(currentServiceType, messageModel.action);
             //获取方法的参数
             var parameters = methodCacheInfo.ParameterInfos;
-            
+
             //是否含有参数
             var isParamater = parameters.Count() > 0;
             //参数信息
