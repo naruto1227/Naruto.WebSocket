@@ -81,7 +81,7 @@ namespace Naruto.WebSocket
                     //接收websocket客户端
                     var webSocketClient = new WebSocketClient
                     {
-                        WebSocket = await context.WebSockets.AcceptWebSocketAsync(),
+                        WebSocket = await context.WebSockets.AcceptWebSocketAsync().ConfigureAwait(false),
                         ConnectionId = connectionId.Any() ? connectionId.ToString() : Guid.NewGuid().ToString(),
                         Context = context
                     };

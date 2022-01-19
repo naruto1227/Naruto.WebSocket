@@ -26,29 +26,25 @@ namespace Naruto.WebSocket.Internal.Storage
         /// <summary>
         /// 添加一个新的客户端
         /// </summary>
-        public Task AddAsync(Guid key, WebSocketClient webSocketClient)
+        public ValueTask AddAsync(Guid key, WebSocketClient webSocketClient)
         {
-            if (key == null)
+            if (key == default)
             {
-                return Task.CompletedTask;
+                return new ValueTask();
             }
             webSocketClients.TryAdd(key, webSocketClient);
-            return Task.CompletedTask;
+            return new ValueTask();
         }
 
         /// <summary>
         /// 移除客户端
         /// </summary>
-        public Task RemoveAsync(Guid key)
+        public ValueTask RemoveAsync(Guid key)
         {
-            if (key == null)
-            {
-                return Task.CompletedTask;
-            }
             webSocketClients.TryRemove(key, out var webSocketClient);
             webSocketClient.WebSocket?.Abort();
             webSocketClient.WebSocket?.Dispose();
-            return Task.CompletedTask;
+            return new ValueTask();
         }
         /// <summary>
         /// 根据主键获取
@@ -57,10 +53,6 @@ namespace Naruto.WebSocket.Internal.Storage
         /// <returns></returns>
         public Task<WebSocketClient> GetAsync(Guid key)
         {
-            if (key == null)
-            {
-                return default;
-            }
             webSocketClients.TryGetValue(key, out var socket);
             return Task.FromResult(socket);
         }
