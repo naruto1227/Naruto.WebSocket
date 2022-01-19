@@ -21,7 +21,7 @@ namespace XUnitTest
             {
                 ClientWebSocket webSocket = new ClientWebSocket();
                 s.Add(webSocket);
-                await webSocket.ConnectAsync(new Uri("ws://localhost:5003/ws"), CancellationToken.None);
+                await webSocket.ConnectAsync(new Uri("ws://localhost:5003/ws?ConnectionId="), CancellationToken.None);
             }
 
         }
@@ -32,7 +32,7 @@ namespace XUnitTest
             ClientWebSocket webSocket = new ClientWebSocket();
             await webSocket.ConnectAsync(new Uri("ws://localhost:5003/ws"), CancellationToken.None);
 
-            var msg = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new { action = "current", connectionId = "12345678", msg = "hello word" }));
+            var msg = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new { action = "current", message = new { msg="test", connectionId ="123"} }));
             for (int i = 0; i < 1000; i++)
             {
                 await webSocket.SendAsync(msg, WebSocketMessageType.Text, true, CancellationToken.None);
