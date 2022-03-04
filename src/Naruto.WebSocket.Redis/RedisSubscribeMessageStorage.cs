@@ -53,6 +53,7 @@ namespace Naruto.WebSocket.Redis
         /// <returns></returns>
         public async Task StoreAsync(string key, SubscribeMessage subscribeMessage)
         {
+
             if (string.IsNullOrWhiteSpace(key))
             {
                 throw new ArgumentNullException(nameof(key));
