@@ -15,18 +15,18 @@ namespace Naruto.WebSocket.Interface
         /// 上线通知
         /// </summary>
         /// <returns></returns>
-        Task OnLineAsync(WebSocketClient webSocketClient);
+        ValueTask OnLineAsync(WebSocketClient webSocketClient);
         /// <summary>
         /// 下线通知
         /// </summary>
         /// <returns></returns>
-        Task OffLineAsync(WebSocketClient webSocketClient);
+        ValueTask OffLineAsync(WebSocketClient webSocketClient);
         /// <summary>
         /// 消息接收
         /// </summary>
         /// <param name="webSocketClient"></param>
         /// <param name="webSocketMessage"></param>
         /// <returns></returns>
-        Task ReciveAsync(WebSocketClient webSocketClient, WebSocketMessageModel webSocketMessage);
+        ValueTask ReciveAsync(WebSocketClient webSocketClient, WebSocketMessageModel webSocketMessage);
     }
 }

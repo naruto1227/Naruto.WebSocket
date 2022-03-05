@@ -21,6 +21,7 @@ namespace server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IWesocketIntercept, DefaultWesocketIntercept>();
             services.AddNarutoWebSocket<MyService2>(a => a.Path = new PathString("/taskmanagement"));
             services.AddNarutoWebSocket<MyService>(a =>
             {
