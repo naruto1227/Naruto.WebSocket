@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,10 +21,13 @@ namespace server
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.ConfigureKestrel(item =>
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                     {
-                        item.ListenAnyIP(5000);
-                    });
+                        webBuilder.ConfigureKestrel(item =>
+                        {
+                            item.ListenAnyIP(5001);
+                        });
+                    }
                     webBuilder.UseStartup<Startup>();
                 });
     }
