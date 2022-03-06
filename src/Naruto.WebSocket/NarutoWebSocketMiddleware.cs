@@ -8,8 +8,8 @@ using Naruto.WebSocket.Internal;
 using Naruto.WebSocket.Internal.Cache;
 using Naruto.WebSocket.Object;
 using Naruto.WebSocket.Object.Enums;
-using Newtonsoft.Json;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -31,7 +31,7 @@ namespace Naruto.WebSocket
         /// <summary>
         /// 接收的消息的大小 
         /// </summary>
-        private long ReciveBuffSize;
+        private int ReciveBuffSize;
 
 
         private readonly RequestDelegate next;
@@ -133,9 +133,9 @@ namespace Naruto.WebSocket
                 while (webSocketClient.WebSocket.State == WebSocketState.Open)
                 {
                     //定义接收消息内容的大小
-                    var contentBytes = new byte[ReciveBuffSize];
+                    using IMemoryOwner<byte> memory = MemoryPool<byte>.Shared.Rent(ReciveBuffSize);
                     //接收消息
-                    var result = await webSocketClient.WebSocket.ReceiveAsync(contentBytes, CancellationToken.None);
+                    var result = await webSocketClient.WebSocket.ReceiveAsync(memory.Memory, CancellationToken.None);
 
                     //关闭的时候直接退出
                     if (result.MessageType == WebSocketMessageType.Close)
@@ -143,7 +143,7 @@ namespace Naruto.WebSocket
                         return;
                     }
                     //构建消息模型
-                    var messageModel = BuildMessageModel(result.MessageType, webSocketClient.ConnectionId, contentBytes);
+                    var messageModel = await BuildMessageModel(result.MessageType, webSocketClient.ConnectionId, memory.Memory.Slice(0, result.Count).ToArray());
                     //处理接收消息事件
                     if (wesocketIntercept != null)
                     {
@@ -178,18 +178,16 @@ namespace Naruto.WebSocket
         /// <param name="bytes">接收的内容</param>
         /// <param name="connectionId">连接id</param>
         /// <returns></returns>
-        private WebSocketMessageModel BuildMessageModel(WebSocketMessageType webSocketMessageType, string connectionId, byte[] bytes)
+        private async Task<WebSocketMessageModel> BuildMessageModel(WebSocketMessageType webSocketMessageType, string connectionId, byte[] bytes)
         {
             //定义接收的对象
             var sendMessageModel = new WebSocketMessageModel();
             //验证消息类型 是否为文本
             if (webSocketMessageType == WebSocketMessageType.Text)
             {
-                //转换消息格式
-                var msg = bytes.ToUtf8String();
                 //反序列化
-                sendMessageModel = msg.ToDeserialize<WebSocketMessageModel>();
-                logger.LogTrace("接收文本消息,{connectionId},{msg}", connectionId, msg);
+                sendMessageModel = await bytes.ToDeserializeAsync<WebSocketMessageModel>();
+                logger.LogTrace("接收文本消息,{connectionId}", connectionId);
             }
             //验证是否为二进制数据
             else if (webSocketMessageType == WebSocketMessageType.Binary)

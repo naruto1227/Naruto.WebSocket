@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-using Newtonsoft.Json;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
+using System.Threading.Tasks;
 
 namespace Naruto.WebSocket.Extensions
 {
@@ -43,13 +47,17 @@ namespace Naruto.WebSocket.Extensions
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T ToDeserialize<T>(this string source)
+        internal static async Task<T> ToDeserializeAsync<T>(this string source)
         {
             if (source == null)
             {
                 return default;
             }
-            return JsonConvert.DeserializeObject<T>(source);
+
+            using var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes(source));
+            memoryStream.Position = 0;
+            return await JsonSerializer.DeserializeAsync<T>(memoryStream);
         }
 
         /// <summary>
@@ -57,26 +65,56 @@ namespace Naruto.WebSocket.Extensions
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static object ToDeserialize(this string source, Type type)
+        internal static async Task<T> ToDeserializeAsync<T>(this byte[] source)
         {
             if (source == null)
             {
                 return default;
             }
-            return JsonConvert.DeserializeObject(source, type);
+
+            using var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(source);
+            memoryStream.Position = 0;
+            return await JsonSerializer.DeserializeAsync<T>(memoryStream);
+        }
+        /// <summary>
+        /// 反序列化
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        internal static async Task<object> ToDeserializeAsync(this string source, Type type)
+        {
+            if (source == null)
+            {
+                return default;
+            }
+
+            var options = new JsonSerializerOptions();
+            options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All); // 中文序列化处理
+            using var memoryStream = new MemoryStream();
+            await memoryStream.WriteAsync(Encoding.UTF8.GetBytes(source));
+            memoryStream.Position = 0;
+            return await JsonSerializer.DeserializeAsync(memoryStream, type,options);
         }
         /// <summary>
         /// 序列化
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static string ToJson(this object source)
+        internal static async Task<string> ToJsonAsync(this object source)
         {
             if (source == null)
             {
                 return default;
             }
-            return JsonConvert.SerializeObject(source);
+
+            using var memoryStream = new MemoryStream();
+            var options = new JsonSerializerOptions();
+            options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All); // 中文序列化处理
+            await JsonSerializer.SerializeAsync(memoryStream, source,options);
+            memoryStream.Position = 0;
+            using var streamReader = new StreamReader(memoryStream, Encoding.UTF8);
+            return await streamReader.ReadToEndAsync();
         }
     }
 }

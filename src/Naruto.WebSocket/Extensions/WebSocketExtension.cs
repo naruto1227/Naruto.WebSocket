@@ -30,7 +30,7 @@ namespace Naruto.WebSocket
             if (sendMessageModel.IsNull())
                 return;
             //发送
-            await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(sendMessageModel.ToJson())), webSocketMessageType, true, CancellationToken.None);
+            await webSocket.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(await sendMessageModel.ToJsonAsync())), webSocketMessageType, true, CancellationToken.None);
         }
     }
 }

@@ -100,7 +100,7 @@ namespace Naruto.WebSocket.Internal
             //是否含有参数
             var isParamater = parameters.Count() > 0;
             //参数信息
-            var parameterEntity = parameters.Count() > 0 ? messageModel.message?.ToString().ToDeserialize(parameters[0].ParameterType) : null;
+            var parameterEntity = parameters.Count() > 0 ?await messageModel.message?.ToString().ToDeserializeAsync(parameters[0].ParameterType) : null;
             //执行操作
             await NarutoWebSocketServiceExpression.ExecAsync(service, messageModel.action, isParamter: isParamater, parameterEntity: parameterEntity, parameterType: isParamater ? parameters[0].ParameterType : default).ConfigureAwait(false);
         }

@@ -25,7 +25,7 @@ namespace Naruto.WebSocket.Internal.Client
 
         public async Task SendAsync(string execAction, object msg)
         {
-            logger.LogTrace("回复当前用户,execAction={execAction},connectionId={connectionId},msg={msg}", execAction, currentContext.WebSocketClient.ConnectionId, msg.ToJson());
+            logger.LogTrace("回复当前用户,execAction={execAction},connectionId={connectionId},msg={msg}", execAction, currentContext.WebSocketClient.ConnectionId, msg);
             await currentContext.WebSocketClient.WebSocket.SendMessage(new Object.WebSocketMessageModel
             {
                 message = msg,

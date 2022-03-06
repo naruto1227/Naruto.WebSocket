@@ -29,6 +29,6 @@ namespace Naruto.WebSocket.Object
         /// <summary>
         /// 消息内容的最大接收大小 默认4kb
         /// </summary>
-        public long MaximumReceiveMessageSize { get; set; } = 1024 * 4;
+        public int MaximumReceiveMessageSize { get; set; } = 1024 * 4;
     }
 }

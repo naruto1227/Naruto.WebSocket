@@ -62,7 +62,7 @@ namespace Naruto.WebSocket.Redis
             {
                 throw new ArgumentNullException(nameof(subscribeMessage));
             }
-            logger.LogTrace("存储订阅的消息,key={key},subscribeMessage=【{subscribeMessage}】", key, subscribeMessage.ToJson());
+            logger.LogTrace("存储订阅的消息,key={key}", key);
             //存储消息，并设置90s有效期
             await redisRepository.String.AddAsync(KeyPrefix + key, subscribeMessage, TimeSpan.FromSeconds(90));
         }

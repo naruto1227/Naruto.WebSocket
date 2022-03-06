@@ -73,7 +73,6 @@ namespace Naruto.WebSocket.Internal.Client
             {
                 return;
             }
-            logger.LogTrace("给指定群组发送消息,groupId={groupId},execAction={execAction},connections={connections},msg={msg}", groupId, execAction, connections.ToJson(), msg.ToJson());
             //获取所有的socket客户端
             var webSockets = await socketClientStorage.GetByConnectionIdAsync(connections);
             if (webSockets != null && webSockets.Count() > 0)

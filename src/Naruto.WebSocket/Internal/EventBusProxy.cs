@@ -33,7 +33,7 @@ namespace Naruto.WebSocket.Internal
         /// <returns></returns>
         public async Task PublishAsync(SubscribeMessage message)
         {
-            logger.LogTrace("发送订阅的消息,msg={msg}", message.ToJson());
+            logger.LogTrace("发送订阅的消息");
             //获取总线服务
             var eventBus = serviceProvider.GetService<IEventBus>();
             if (eventBus == null)

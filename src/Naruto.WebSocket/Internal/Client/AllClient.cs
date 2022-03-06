@@ -72,7 +72,7 @@ namespace Naruto.WebSocket.Internal.Client
         /// <returns></returns>
         public async Task SendMessageAsync(string execAction, object msg)
         {
-            logger.LogTrace("发送消息给所有的在线用户,execAction={execAction},msg={msg}", execAction, msg.ToJson());
+            logger.LogTrace("发送消息给所有的在线用户,execAction={execAction", execAction);
             //获取所有在线的用户
             var webSockets = await socketClientStorage.GetAllAsync();
             Parallel.ForEach(webSockets, async item =>

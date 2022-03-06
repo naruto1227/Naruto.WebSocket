@@ -58,7 +58,7 @@ namespace Naruto.WebSocket.Redis
                         //获取消息
                         var subscribeMessage = await messageStorage.GetAsync(message.ToString());
                         logger.LogTrace("接收消息订阅信息之前:验证系统标识:messageSystemIdentity=[{messageSystemIdentity}],NowSystemIdentity=[{NowSystemIdentity}]", subscribeMessage?.SystemIdentity, GlobalCache.SystemIdentity);
-                        logger.LogTrace("接收消息订阅信息,消息key={key},subscribeMessage=【{subscribeMessage}】", message.ToString(), subscribeMessage.ToJson());
+                        logger.LogTrace("接收消息订阅信息,消息key={key}", message.ToString());
                         //验证系统的标识，不处理当前系统的发送出去的消息
                         if (subscribeMessage == null || subscribeMessage.SystemIdentity.Equals(GlobalCache.SystemIdentity))
                         {
@@ -66,7 +66,7 @@ namespace Naruto.WebSocket.Redis
                         }
                         //获取消息信息
                         var sendMessageModel = subscribeMessage.ParamterEntity.Message;
-                        logger.LogTrace("分布式发送消息,sendMessageModel=【{sendMessageModel}】", sendMessageModel.ToJson());
+                        logger.LogTrace("分布式发送消息");
                         switch (subscribeMessage.SendTypeEnum)
                         {
                             //所有用户
