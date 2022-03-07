@@ -142,7 +142,8 @@ namespace Naruto.WebSocket
                     {
                         return;
                     }
-                    //构建消息模型
+                    
+                    //构建消息模型 并且裁剪消息的内容根据具体的消息
                     var messageModel = await BuildMessageModel(result.MessageType, webSocketClient.ConnectionId, memory.Memory.Slice(0, result.Count).ToArray());
                     //处理接收消息事件
                     if (wesocketIntercept != null)
