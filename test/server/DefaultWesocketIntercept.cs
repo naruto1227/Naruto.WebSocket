@@ -22,7 +22,7 @@ namespace server
 
         public ValueTask OnLineAsync(WebSocketClient webSocketClient)
         {
-            _logger.LogInformation("上线通知，ConnectionId={ConnectionId}", webSocketClient.ConnectionId);
+            _logger.LogInformation("上线通知，ConnectionId={ConnectionId},时间={date}", webSocketClient.ConnectionId,DateTime.Now);
             return new ValueTask();
         }
 
